@@ -36,6 +36,7 @@ public class BlockingQueueLianXi2<E> implements BlockingQueue<E> {
 
     /**
      * 判断队列是否满
+     * 判断队列是否满
      *
      * @return
      */
