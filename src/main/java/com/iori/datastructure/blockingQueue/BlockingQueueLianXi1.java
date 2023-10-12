@@ -22,6 +22,7 @@ public class BlockingQueueLianXi1<E> implements BlockingQueue<E> {
     public static void main(String[] args) throws InterruptedException {
         BlockingQueue1<String> queue = new BlockingQueue1<>(3);
         queue.offer("任务1");
+        queue.offer("任务2");
 
         new Thread(() -> {
             try {
