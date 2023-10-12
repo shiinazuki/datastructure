@@ -2,11 +2,12 @@ package com.iori.datastructure.blockingQueue;
 
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * 单锁实现 阻塞队列
+ * 双锁实现 阻塞队列
  *
  * @param <E>
  */
@@ -15,45 +16,33 @@ public class BlockingQueueLianXi2<E> implements BlockingQueue<E> {
     private final E[] array;
     private int head;
     private int tail;
-    private int size;
+    private AtomicInteger size = new AtomicInteger();
+
 
     public BlockingQueueLianXi2(int capacity) {
         array = (E[]) new Object[capacity];
     }
 
-    private ReentrantLock lock = new ReentrantLock();
-    private Condition headWaits = lock.newCondition();
-    private Condition tailWaits = lock.newCondition();
 
-    /**
-     * 判断队列是否为空
-     *
-     * @return
-     */
-    private boolean isEmpty() {
-        return size == 0;
+    private ReentrantLock headLock = new ReentrantLock();
+    private Condition headWaits = headLock.newCondition();
+
+    private ReentrantLock tailLock = new ReentrantLock();
+    private Condition tailWaits = tailLock.newCondition();
+
+
+    public boolean isEmpty() {
+        return size.get() == 0;
     }
 
-    /**
-     * 判断队列是否满
-     * 判断队列是否满
-     *
-     * @return
-     */
-    private boolean isFull() {
-        return size == array.length;
+    public boolean isFull() {
+        return size.get() == array.length;
     }
 
-    /**
-     * 添加方法
-     *
-     * @param e
-     * @throws InterruptedException
-     */
     @Override
-    public void offer(E e) throws InterruptedException { //poll 等待队列非空
-        lock.lockInterruptibly();
-        //如果队列满了 去等待
+    public void offer(E e) throws InterruptedException {
+        tailLock.lockInterruptibly();
+        int num;
         while (isFull()) {
             tailWaits.await();
         }
@@ -62,91 +51,71 @@ public class BlockingQueueLianXi2<E> implements BlockingQueue<E> {
             if (++tail == array.length) {
                 tail = 0;
             }
-            size++;
-            //唤醒等待线程
-            headWaits.signal();
+            num = size.getAndIncrement();
+
+            //减少加锁次数
+            //自增 返回原来的值  +1 比较是否小于数组长度
+            if (num + 1 < array.length) {
+                tailWaits.signal();
+            }
+
+
         } finally {
-            lock.unlock();
+            tailLock.unlock();
         }
+
+        if (num == 0) {
+            headLock.lock();
+            try {
+                headWaits.signal();
+            } finally {
+                headLock.unlock();
+            }
+        }
+
+
     }
 
-    /**
-     * 添加元素 在有限的时间等待
-     * @param e
-     * @param timeout
-     * @return
-     * @throws InterruptedException
-     */
     @Override
     public boolean offer(E e, long timeout) throws InterruptedException {
-        lock.lockInterruptibly();
-        try {
-            long nanos = TimeUnit.MILLISECONDS.toNanos(timeout);
-            while (isFull()) {
-                if (nanos < 0) {
-                    return false;
-                }
-                nanos = tailWaits.awaitNanos(nanos);//最多等待多少纳秒
-            }
-            array[tail] = e;
-            if (++tail == array.length) {
-                tail = 0;
-            }
-            size++;
-            headWaits.signal();
-            return true;
-        } finally {
-            lock.unlock();
-        }
+        return false;
     }
 
     @Override
     public E poll() throws InterruptedException {
-        lock.lockInterruptibly();
+        headLock.lockInterruptibly();
+        E e;
+        int num;
+        while (isEmpty()) {
+            headWaits.await();
+        }
         try {
-            //如果队列为空 等待
-            while (isEmpty()) {
-                headWaits.await();
-            }
-            E e = array[head];
-            array[head] = null; //help gc
+            e = array[head];
+            array[head] = null;
             if (++head == array.length) {
                 head = 0;
             }
-            size--;
-            //通知等待线程
-            tailWaits.signal();
-            return e;
+            num = size.getAndDecrement();
+            //唤醒
+            if (num > 1) {
+                headWaits.signal();
+            }
 
         } finally {
-            lock.unlock();
+            headLock.unlock();
         }
-    }
-    @Override
-    public String toString() {
-        return Arrays.toString(array);
-    }
-
-
-    public static void main(String[] args) throws InterruptedException {
-        BlockingQueueLianXi2<String> queue = new BlockingQueueLianXi2<>(3);
-        queue.offer("任务1");
-
-        new Thread(()->{
+        //数组长度 -1 变成不满了 返回原来的值
+        if (num == array.length) {
+            tailLock.lock();
             try {
-                queue.offer("任务2");
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+                tailWaits.signal();
+            } finally {
+                tailLock.unlock();
             }
-        }, "offer").start();
+        }
 
-        new Thread(()->{
-            try {
-                System.out.println(queue.poll());
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }, "poll").start();
+        return e;
+
     }
 
 

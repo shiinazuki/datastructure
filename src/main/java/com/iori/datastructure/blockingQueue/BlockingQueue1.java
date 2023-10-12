@@ -82,7 +82,7 @@ public class BlockingQueue1<E> implements BlockingQueue<E> {
         try {
             long nanos = TimeUnit.MILLISECONDS.toNanos(timeout);
             while (isFull()) {
-                if (nanos < 0) {
+                if (nanos <= 0) {
                     return false;
                 }
                 nanos = tailWaits.awaitNanos(nanos);//最多等待多少纳秒

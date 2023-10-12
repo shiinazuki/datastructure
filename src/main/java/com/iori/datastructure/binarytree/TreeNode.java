@@ -1,5 +1,7 @@
 package com.iori.datastructure.binarytree;
 
+import java.util.Arrays;
+
 /**
  * <h3>树节点类</h3>
  */
@@ -22,4 +24,6 @@ public class TreeNode {
     public String toString() {
         return String.valueOf(this.val);
     }
+
+
 }
