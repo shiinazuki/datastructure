@@ -1,6 +1,5 @@
 package com.iori.datastructure.binarytree;
 
-import java.util.Arrays;
 
 /**
  * <h3>树节点类</h3>

@@ -1,13 +1,17 @@
 package com.iori.datastructure.stack;
 
 import java.util.Iterator;
+import java.util.StringJoiner;
 
 public class LinkedListStack<E> implements Stack<E>, Iterable<E> {
     //容量
-    private int capacity;
+    private int capacity = Integer.MAX_VALUE;
     //元素个数
     private int size;
     private Node<E> head = new Node<>(null, null);
+
+    public LinkedListStack() {
+    }
 
     public LinkedListStack(int capacity) {
         this.capacity = capacity;
@@ -79,6 +83,13 @@ public class LinkedListStack<E> implements Stack<E>, Iterable<E> {
             }
         };
     }
-
+    @Override
+    public String toString() {
+        StringJoiner sj = new StringJoiner(",");
+        for (E e : this) {
+            sj.add(e.toString());
+        }
+        return sj.toString();
+    }
 
 }

@@ -1,6 +1,7 @@
 package com.iori.datastructure.blockingQueue;
 
 import java.util.Arrays;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -58,11 +59,11 @@ public class BlockingQueue2<E> implements BlockingQueue<E> {
     public void offer(E e) throws InterruptedException { //poll 等待队列非空
         tailLock.lockInterruptibly();
         int num;//代表新增前 元素个数
+        // 队列满则等待
+        while (isFull()) {
+            tailWaits.await();
+        }
         try {
-            // 队列满则等待
-            while (isFull()) {
-                tailWaits.await();
-            }
             //队列不满 则入队
             array[tail] = e;
             if (++tail == array.length) {
@@ -77,7 +78,7 @@ public class BlockingQueue2<E> implements BlockingQueue<E> {
             //原子自增
             num = size.getAndIncrement();
             //自增前加1 不满 仍有空位 唤醒别的offer线程
-            if(num + 1 < array.length) {
+            if (num + 1 < array.length) {
                 tailWaits.signal();
             }
 
@@ -144,7 +145,8 @@ public class BlockingQueue2<E> implements BlockingQueue<E> {
         //放在平级 避免死锁
         //唤醒等待不满的offer线程
         //加个判断 队列从满 -> 不满 由poll唤醒等待不满的offer线程
-        if(num == array.length) {
+        //从满到不满 减少之前队列是满的
+        if (num == array.length) {
             tailLock.lock();
             try {
                 tailWaits.signal();

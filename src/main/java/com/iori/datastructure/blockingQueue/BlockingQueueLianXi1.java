@@ -12,7 +12,44 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class BlockingQueueLianXi1<E> implements BlockingQueue<E> {
 
-   private E[] array;
+    private final E[] array;
+    private int head;
+    private int tail;
+    private int size;
+
+    public BlockingQueueLianXi1(int capacity) {
+        array = (E[]) new Object[capacity];
+    }
+
+    private ReentrantLock lock = new ReentrantLock();
+    private Condition headWaits = lock.newCondition();
+    private Condition tailWaits = lock.newCondition();
+
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    public boolean isFull() {
+        return size == array.length;
+    }
+
+
+    @Override
+    public void offer(E e) throws InterruptedException {
+
+    }
+
+    @Override
+    public boolean offer(E e, long timeout) throws InterruptedException {
+
+        return true;
+    }
+
+    @Override
+    public E poll() throws InterruptedException {
+
+        return null;
+    }
 
     @Override
     public String toString() {
@@ -41,18 +78,4 @@ public class BlockingQueueLianXi1<E> implements BlockingQueue<E> {
     }
 
 
-    @Override
-    public void offer(E e) throws InterruptedException {
-
-    }
-
-    @Override
-    public boolean offer(E e, long timeout) throws InterruptedException {
-        return false;
-    }
-
-    @Override
-    public E poll() throws InterruptedException {
-        return null;
-    }
 }
