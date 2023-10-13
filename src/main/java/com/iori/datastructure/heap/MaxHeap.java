@@ -34,7 +34,7 @@ public class MaxHeap {
      *
      * @param parent
      */
-    private void down(int parent) {
+    public void down(int parent) {
         int left = parent * 2 + 1;
         int right = left + 1;
         int max = parent;
@@ -57,7 +57,7 @@ public class MaxHeap {
      * @param i
      * @param j
      */
-    private void swap(int i, int j) {
+    public void swap(int i, int j) {
         int temp = array[i];
         array[i] = array[j];
         array[j] = temp;
