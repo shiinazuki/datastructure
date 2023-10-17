@@ -12,7 +12,7 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class BlockingQueueLianXi1<E> implements BlockingQueue<E> {
 
-    private final E[] array;
+    private E[] array;
     private int head;
     private int tail;
     private int size;
@@ -23,7 +23,7 @@ public class BlockingQueueLianXi1<E> implements BlockingQueue<E> {
 
     private ReentrantLock lock = new ReentrantLock();
     private Condition headWaits = lock.newCondition();
-    private Condition tailWaits = lock.newCondition();
+    private Condition tailWatis = lock.newCondition();
 
     public boolean isEmpty() {
         return size == 0;
@@ -47,6 +47,7 @@ public class BlockingQueueLianXi1<E> implements BlockingQueue<E> {
 
     @Override
     public E poll() throws InterruptedException {
+
 
         return null;
     }

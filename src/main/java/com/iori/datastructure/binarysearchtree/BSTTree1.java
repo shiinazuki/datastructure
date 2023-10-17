@@ -1,6 +1,5 @@
 package com.iori.datastructure.binarysearchtree;
 
-import com.iori.datastructure.binarytree.TreeNode;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

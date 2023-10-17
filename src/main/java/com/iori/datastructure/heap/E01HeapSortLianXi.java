@@ -5,26 +5,40 @@ import java.util.Arrays;
 /**
  * 堆排序
  */
-public class E01HeapSort {
-    public static void sort(int[] array) {
-        // 1. 建堆
-        int size = array.length;
-        heapify(array, size);
+public class E01HeapSortLianXi {
 
+
+    public static void main(String[] args) {
+        int[] array = {2, 3, 1, 7, 6, 4, 5};
+        int[] nums = {2, 3, 1,1, 7, 6,1,14, 5};
+        int val = 1;
+        //sort(array);
+        //System.out.println(Arrays.toString(array));
+        int i = 0,j = 0;
+        while (j < nums.length) {
+            if (nums[j] != val) {
+                nums[i] = nums[j];
+                i++;
+            }
+            j++;
+        }
+        //return i;
+    }
+
+    public static void sort(int[] array) {
+        int size = array.length;
+        heapify(array);
         while (size > 1) {
-            // 2. 将堆顶元素交换至堆底
             swap(array, 0, size - 1);
-            // 堆大小减一
             size--;
-            // 重新调整堆
             down(array, 0, size);
         }
     }
 
     // 建堆
-    private static void heapify(int[] array, int size) {
-        for (int i = size / 2 - 1; i >= 0; i--) {
-            down(array, i, size);
+    private static void heapify(int[] array) {
+        for (int i = array.length / 2 - 1; i >= 0; i--) {
+            down(array, i, array.length - 1);
         }
     }
 
@@ -39,7 +53,7 @@ public class E01HeapSort {
         if (right < size && array[right] > array[max]) {
             max = right;
         }
-        if (max != parent) { // 找到了更大的孩子
+        if (max != parent) {
             swap(array, max, parent);
             down(array, max, size);
         }
@@ -52,9 +66,5 @@ public class E01HeapSort {
         array[j] = t;
     }
 
-    public static void main(String[] args) {
-        int[] array = {2, 3, 1, 7, 6, 4, 5};
-        sort(array);
-        System.out.println(Arrays.toString(array));
-    }
+
 }

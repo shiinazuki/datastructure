@@ -58,11 +58,11 @@ public class BlockingQueue2<E> implements BlockingQueue<E> {
     @Override
     public void offer(E e) throws InterruptedException { //poll 等待队列非空
         tailLock.lockInterruptibly();
-        int num;//代表新增前 元素个数
         // 队列满则等待
         while (isFull()) {
             tailWaits.await();
         }
+        int num;//代表新增前 元素个数
         try {
             //队列不满 则入队
             array[tail] = e;
@@ -112,14 +112,15 @@ public class BlockingQueue2<E> implements BlockingQueue<E> {
 
     @Override
     public E poll() throws InterruptedException {
+
+        headLock.lockInterruptibly();
+        //先判断是否为空
+        while (isEmpty()) {
+            headWaits.await();
+        }
         E e;
         int num; //取走前的元素个数
-        headLock.lockInterruptibly();
         try {
-            //先判断是否为空
-            while (isEmpty()) {
-                headWaits.await();
-            }
             //取出头元素 并置空
             e = array[head];
             array[head] = null; //help gc

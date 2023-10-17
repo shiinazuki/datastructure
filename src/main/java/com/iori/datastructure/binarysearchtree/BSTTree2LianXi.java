@@ -11,9 +11,9 @@ import java.util.List;
  * 二叉搜索树, 泛型 key 版本
  */
 @SuppressWarnings("all")
-public class BSTTree2<K extends Comparable<K>, V> {
+public class BSTTree2LianXi<K extends Comparable<K>, V> {
 
-    BSTNode<K, V> root; //根节点
+    private BSTNode<K, V> root; //根节点
 
     static class BSTNode<K, V> {
         K key;
@@ -30,13 +30,14 @@ public class BSTTree2<K extends Comparable<K>, V> {
             this.value = value;
         }
 
-        public BSTNode(K key, V value, BSTNode left, BSTNode right) {
+        public BSTNode(K key, V value, BSTNode<K, V> left, BSTNode<K, V> right) {
             this.key = key;
             this.value = value;
             this.left = left;
             this.right = right;
         }
     }
+
 
     /**
      * <h3>查找关键字对应的值</h3>
@@ -45,21 +46,18 @@ public class BSTTree2<K extends Comparable<K>, V> {
      * @return 关键字对应的值
      */
     public V get(K key) {
-
-        BSTNode<K, V> p = root;
-        while (p != null) {
-
-            //     -1 key < p.key
-            //     0 key = p.key
-            //     1 key > p.key
-
-            int result = key.compareTo(p.key);
-            if (result < 0) {
-                p = p.left; //向左走
-            } else if (result > 0) {
-                p = p.right; //向右找
-            } else {
-                return p.value;
+        if (key == null || root == null) {
+            return null;
+        }
+        BSTNode<K, V> node = root;
+        while (node != null) {
+            int result = key.compareTo(node.key);
+            if (result < 0) { //往左
+                node = node.left;
+            } else if (result > 0) { //往右
+                node = node.right;
+            } else { //找到了
+                return node.value;
             }
         }
         return null;
@@ -71,7 +69,6 @@ public class BSTTree2<K extends Comparable<K>, V> {
 
 
     private V doGet(BSTNode<K, V> node, K key) {
-        //使用递归来查找元素
         if (node == null) {
             return null;
         }
@@ -92,12 +89,10 @@ public class BSTTree2<K extends Comparable<K>, V> {
      */
     public V min() {
         return min(root);
-        //递归
-        //return doMin(root);
     }
 
     /**
-     * 找最大值
+     * 找最小值
      *
      * @param node
      * @return
@@ -106,11 +101,10 @@ public class BSTTree2<K extends Comparable<K>, V> {
         if (node == null) {
             return null;
         }
-        BSTNode<K, V> p = node;
-        while (p.left != null) {
-            p = p.left;
+        while (node.left != null) {
+            node = node.left;
         }
-        return p.value;
+        return node.value;
     }
 
     /**
@@ -137,9 +131,6 @@ public class BSTTree2<K extends Comparable<K>, V> {
 
     public V max() {
         return max(root);
-        //递归
-        //return doMax(root);
-
     }
 
     /**
@@ -152,11 +143,10 @@ public class BSTTree2<K extends Comparable<K>, V> {
         if (node == null) {
             return null;
         }
-        BSTNode<K, V> p = node;
-        while (p.right != null) {
-            p = p.right;
+        while (node.right != null) {
+            node = node.right;
         }
-        return p.value;
+        return node.value;
     }
 
     /**
@@ -182,17 +172,13 @@ public class BSTTree2<K extends Comparable<K>, V> {
      * @param value 值
      */
     public void put(K key, V value) {
-        // 1 key 有 更新
-        // 2 key 没有 新增
         BSTNode<K, V> p = root;
-        BSTNode<K, V> parent = null; //用来保存父节点
+        BSTNode<K, V> parent = null;
         while (p != null) {
-            //这个比较一定要写循环里边!!!!!
+            parent = p;//记录父节点
             int result = key.compareTo(p.key);
-
-            parent = p; //记录父节点
-            if (result < 0) { //往左找
-                p = p.left;
+            if (result < 0) {
+                p = p.right;
             } else if (result > 0) {
                 p = p.right;
             } else {
@@ -200,18 +186,16 @@ public class BSTTree2<K extends Comparable<K>, V> {
                 return;
             }
         }
-        //树空
         if (parent == null) {
             root = new BSTNode<>(key, value);
             return;
         }
-
-
         if (key.compareTo(parent.key) < 0) {
             parent.left = new BSTNode<>(key, value);
         } else {
             parent.right = new BSTNode<>(key, value);
         }
+
 
     }
 
@@ -223,32 +207,29 @@ public class BSTTree2<K extends Comparable<K>, V> {
      */
     public V predecessor(K key) {
         BSTNode<K, V> p = root;
-        BSTNode<K, V> ancestorFromLeft = null; //定义一个自左而来的变量
+        BSTNode<K, V> fromLeft = null;
         while (p != null) {
             int result = key.compareTo(p.key);
-
-            if (result < 0) {//往左找
+            if (result < 0) {
                 p = p.left;
-            } else if (result > 0) { //往右找
-                ancestorFromLeft = p;
+            } else if (result > 0) {
+                fromLeft = p;
                 p = p.right;
             } else {
                 break;
             }
         }
 
-        //没找到节点的情况
         if (p == null) {
             return null;
         }
-        //找到节点
-        //情况1: 节点有左子树,此时前任就是左子树的最大值
+
         if (p.left != null) {
             return max(p.left);
         }
-        //情况2: 节点没有左子树,若离它最近的 自左而来的祖先就是前任
-        if (ancestorFromLeft != null) {
-            return ancestorFromLeft.value;
+
+        if (fromLeft != null) {
+            return fromLeft.value;
         }
         return null;
     }
@@ -260,12 +241,13 @@ public class BSTTree2<K extends Comparable<K>, V> {
      * @return 后任值
      */
     public V successor(K key) {
+
         BSTNode<K, V> p = root;
-        BSTNode<K, V> ancestorFromRight = null;//定义一个自右而来的变量
+        BSTNode<K, V> fromRight = null;
         while (p != null) {
             int result = key.compareTo(p.key);
-            if (result < 0) { //往左找
-                ancestorFromRight = p;
+            if (result < 0) {
+                fromRight = p;
                 p = p.left;
             } else if (result > 0) {
                 p = p.right;
@@ -273,18 +255,20 @@ public class BSTTree2<K extends Comparable<K>, V> {
                 break;
             }
         }
+
         if (p == null) {
             return null;
         }
-        //情况1: 节点有右子树,此时后继节点即为右子树的最小值
+
         if (p.right != null) {
             return min(p.right);
         }
-        //情况2:节点没有右子树,若离它最近的祖先自右而来,此祖先即为后继
-        if (ancestorFromRight != null) {
-            return ancestorFromRight.value;
+
+        if (fromRight != null) {
+            return fromRight.value;
         }
         return null;
+
     }
 
     /**
@@ -298,46 +282,49 @@ public class BSTTree2<K extends Comparable<K>, V> {
         BSTNode<K, V> parent = null;
         while (p != null) {
             int result = key.compareTo(p.key);
-            if (result < 0) {//往左找
+            if (result < 0) {
                 parent = p;
                 p = p.left;
-            } else if (result > 0) { //往右找
+            } else if (result > 0) {
                 parent = p;
                 p = p.right;
             } else {
                 break;
             }
         }
-        //删除的节点不存在
+
         if (p == null) {
             return null;
         }
-        //删除操作
+
         if (p.left == null) {
-            //情况1: 没有左孩子
             shift(parent, p, p.right);
         } else if (p.right == null) {
-            //情况2  没有右孩子
             shift(parent, p, p.left);
         } else {
-            //情况4.1 被删除节点找后事
+            //左右都有节点
+            //处理后继节点
             BSTNode<K, V> s = p.right;
-            BSTNode<K, V> sparent = p; //后继 父亲
+            BSTNode<K, V> sparent = p;
+            //处理后继节点不相邻的情况
+            //先找到后继节点
             while (s.left != null) {
+                //先找出后继节点的父节点
                 sparent = s;
                 s = s.left;
             }
-            //后继节点为 s
-            if (sparent != p) { //不相邻
-                //情况4.2 删除节点与后继节点不相邻 处理后继的后事
-                shift(sparent, s, s.right); //不可能有左孩子
-                s.right = p.right;//修改右孩子
+            if (p != sparent) {
+                shift(sparent, s, s.right);
+                s.right = p.right;
             }
-            //情况4.3 后继取代被删除节点
+
             shift(parent, p, s);
-            s.left = p.left; //修改左指针
+            s.left = p.left;
+
         }
         return p.value;
+
+
     }
 
     /**
@@ -350,7 +337,7 @@ public class BSTTree2<K extends Comparable<K>, V> {
     private void shift(BSTNode<K, V> parent, BSTNode<K, V> deleted, BSTNode<K, V> child) {
         if (parent == null) {
             root = child;
-        } else if (deleted == parent.left) {
+        } else if (parent.left == deleted) {
             parent.left = child;
         } else {
             parent.right = child;
@@ -366,35 +353,41 @@ public class BSTTree2<K extends Comparable<K>, V> {
     }
     */
 
+
+
+
+
+
+
     private BSTNode<K, V> deRemove(BSTNode<K, V> node, K key, ArrayList<V> result) {
+
         if (node == null) {
             return null;
         }
-        if (key.compareTo(node.key) < 0) { //往左
+        if (key.compareTo(node.key) < 0) {
             node.left = deRemove(node.left, key, result);
             return node;
         }
-        if (key.compareTo(node.key) > 0) { //往右
+        if (key.compareTo(node.key) > 0) {
             node.right = deRemove(node.right, key, result);
             return node;
         }
         result.add(node.value);
-        //情况1 只有右孩子
+
         if (node.left == null) {
             return node.right;
         }
-        //情况2 只有左孩子
         if (node.right == null) {
             return node.left;
         }
 
-        //情况3 有两个孩子
         BSTNode<K, V> s = node.right;
         while (s.left != null) {
             s = s.left;
         }
-        s.right = deRemove(node.right, s.key, new ArrayList<>());
+        s.right = deRemove(s, key, new ArrayList<>());
         s.left = node.left;
+
         return s;
     }
 
@@ -410,14 +403,14 @@ public class BSTTree2<K extends Comparable<K>, V> {
 
     // 找 < key 的所有 value
     public List<V> less(K key) {
-        ArrayList<V> result = new ArrayList<>();
+        List<V> result = new ArrayList<>();
 
-        BSTNode<K, V> curr = root;
+        BSTNode<K, V> p = root;
         LinkedList<BSTNode<K, V>> stack = new LinkedList<>();
-        while (curr != null || !stack.isEmpty()) {
-            if (curr != null) {
-                stack.push(curr);
-                curr = curr.left;
+        while (p != null || !stack.isEmpty()) {
+            if (p != null) {
+                stack.push(p);
+                p = p.left;
             } else {
                 BSTNode<K, V> pop = stack.pop();
                 if (key.compareTo(pop.key) > 0) {
@@ -425,22 +418,25 @@ public class BSTTree2<K extends Comparable<K>, V> {
                 } else {
                     break;
                 }
-                curr = pop.right;
+                p = pop.right;
             }
         }
+
         return result;
+
     }
 
     // 找 > key 的所有 value
     public List<V> greater(K key) {
-        ArrayList<V> result = new ArrayList<>();
 
-        BSTNode<K, V> curr = root;
+        List<V> result = new ArrayList<>();
+
+        BSTNode<K, V> p = root;
         LinkedList<BSTNode<K, V>> stack = new LinkedList<>();
-        while (curr != null || !stack.isEmpty()) {
-            if (curr != null) {
-                stack.push(curr);
-                curr = curr.right;
+        while (p != null || !stack.isEmpty()) {
+            if (p != null) {
+                stack.push(p);
+                p = p.right;
             } else {
                 BSTNode<K, V> pop = stack.pop();
                 if (key.compareTo(pop.key) < 0) {
@@ -448,30 +444,30 @@ public class BSTTree2<K extends Comparable<K>, V> {
                 } else {
                     break;
                 }
-                curr = pop.left;
+                p = pop.left;
             }
         }
         return result;
+
     }
 
     // 找 >= key1 且 <= key2 的所有值
     public List<V> between(K key1, K key2) {
-        ArrayList<V> result = new ArrayList<>();
+        List<V> result = new ArrayList<>();
 
+        BSTNode<K, V> p = root;
         LinkedList<BSTNode<K, V>> stack = new LinkedList<>();
-        BSTNode<K, V> curr = root;
-        while (curr != null || !stack.isEmpty()) {
-            if (curr != null) {
-                stack.push(curr);
-                curr = curr.left;
+        while (p != null || !stack.isEmpty()) {
+            if (p != null) {
+                stack.push(p);
+                p = p.left;
             } else {
                 BSTNode<K, V> pop = stack.pop();
-                if (key1.compareTo(pop.key) <= 0 && key2.compareTo(pop.key) >= 0) {
-                    result.add(pop.value);
-                } else if (pop.key.compareTo(key2) > 0) {
+                if (key1.compareTo(p.key) <= 0 && key2.compareTo(p.key) >= 0) {
+                    result.add(p.value);
+                } else if (key2.compareTo(pop.key) < 0) {
                     break;
                 }
-                curr = pop.right;
             }
         }
         return result;

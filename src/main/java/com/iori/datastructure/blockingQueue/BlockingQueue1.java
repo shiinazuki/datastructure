@@ -79,14 +79,14 @@ public class BlockingQueue1<E> implements BlockingQueue<E> {
     @Override
     public boolean offer(E e, long timeout) throws InterruptedException {
         lock.lockInterruptibly();
-        try {
-            long nanos = TimeUnit.MILLISECONDS.toNanos(timeout);
-            while (isFull()) {
-                if (nanos <= 0) {
-                    return false;
-                }
-                nanos = tailWaits.awaitNanos(nanos);//最多等待多少纳秒
+        long nanos = TimeUnit.MILLISECONDS.toNanos(timeout);
+        while (isFull()) {
+            if (nanos <= 0) {
+                return false;
             }
+            nanos = tailWaits.awaitNanos(nanos);//最多等待多少纳秒
+        }
+        try {
             array[tail] = e;
             if (++tail == array.length) {
                 tail = 0;
@@ -102,11 +102,11 @@ public class BlockingQueue1<E> implements BlockingQueue<E> {
     @Override
     public E poll() throws InterruptedException {
         lock.lockInterruptibly();
+        //如果队列为空 等待
+        while (isEmpty()) {
+            headWaits.await();
+        }
         try {
-            //如果队列为空 等待
-            while (isEmpty()) {
-                headWaits.await();
-            }
             E e = array[head];
             array[head] = null; //help gc
             if (++head == array.length) {
