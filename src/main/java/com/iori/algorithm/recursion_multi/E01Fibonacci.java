@@ -7,6 +7,10 @@ import java.util.Arrays;
  */
 public class E01Fibonacci {
 
+    public static void main(String[] args) {
+        System.out.println(fibonacci(6));
+    }
+
     /**
      * 递归求斐波那契第 n 项
      * @param n

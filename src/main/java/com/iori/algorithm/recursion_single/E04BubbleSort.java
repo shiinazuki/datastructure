@@ -41,19 +41,6 @@ public class E04BubbleSort {
     }
 
 
-    public static void bubbleLianXi(int[] array) {
-
-        //使用双层for循环
-        for (int i = 0; i < array.length; i++) {
-            for (int j = 0; j < array.length - i - 1; j++) {
-                int temp = array[j];
-                array[j + 1] = array[j];
-                array[j] = temp;
-            }
-        }
-
-
-    }
 
     public static void bubbleLianXi(int[] array, int j) {
 
@@ -74,18 +61,22 @@ public class E04BubbleSort {
     }
 
     //简单冒泡排序
-    private static void simpleBubble(int[] array) {
-        int temp;
+    //冒泡排序
+    private  void simpleBubble(int[] array) {
+        long begin = System.currentTimeMillis();
         for (int i = 0; i < array.length; i++) {
             for (int j = 0; j < array.length - i - 1; j++) {
-                if (array[j] > array[j + 1]) {
-                    temp = array[j];
-                    array[j] = array[j + 1];
-                    array[j + 1] = temp;
+                if (array[i] < array[j]) {
+                    int temp = array[i];
+                    array[i] = array[j];
+                    array[j] = temp;
                 }
             }
         }
+        long end = System.currentTimeMillis();
+        System.out.println(end - begin);
 
     }
+
 
 }

@@ -17,6 +17,9 @@ public class DynamicArray implements Iterable<Integer> {
 
     private int[] array = {};
 
+    public int[] array() {
+        return Arrays.copyOf(array,size);
+    }
 
     /**
      * 将元素添加到数组的最后

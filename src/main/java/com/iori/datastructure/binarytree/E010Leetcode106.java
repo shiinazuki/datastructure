@@ -1,6 +1,9 @@
 package com.iori.datastructure.binarytree;
 
 import java.util.Arrays;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Stack;
 
 /**
  * 根据中序和后序遍历结果构造二叉树
@@ -53,9 +56,52 @@ public class E010Leetcode106 {
 
     }
 
+    public static TreeNode buildTree1(int[] inOrder, int[] postOrder) {
+        if (inOrder.length == 0) {
+            return null;
+        }
+        TreeNode root = new TreeNode(postOrder[postOrder.length - 1]);
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+        int in = inOrder.length - 1;
+        //倒叙遍历后序
+        for (int i = postOrder.length - 2; i >= 0; i--) {
+            int postVal = postOrder[i];
+            TreeNode node = stack.peek();
+            if (node.val == inOrder[in]) {
+                while (!stack.isEmpty() && stack.peek().val == inOrder[in]) {
+                    node = stack.pop();
+                    in--;
+                }
+                node.left = new TreeNode(postVal);
+                stack.push(node.left);
+            } else {
+                node.right = new TreeNode(postVal);
+                stack.push(node.right);
+            }
+        }
+
+        return root;
+    }
+
     public static void main(String[] args) {
 
+        int[] inOrder = new int[]{15, 9, 10, 3, 20, 5, 7, 8, 4};
+        int[] postOrder = new int[]{15, 10, 9, 5, 4, 8, 7, 20, 3};
+        TreeNode treeNode = buildTree1(inOrder, postOrder);
+        TreeNode cur = treeNode;
+        Stack<TreeNode> stack = new Stack<>();
+        while (cur != null || !stack.isEmpty()) {
+            if (cur != null) {
+                stack.push(cur);
 
+                cur = cur.left;
+            } else {
+                TreeNode pop = stack.pop();
+                System.out.println(pop.val);
+                cur = pop.right;
+            }
+        }
     }
 
 

@@ -22,7 +22,7 @@ public class RedBlackTree {
         Node left;
         Node right;
         Node parent;
-        Color color = Color.RED;
+        Color color = RED;
 
         public Node(int key) {
             this.key = key;
@@ -56,12 +56,12 @@ public class RedBlackTree {
          *
          * @return
          */
-        boolean isLetChild() {
+        boolean isLeftChild() {
             return parent != null && parent.left == this;
         }
 
         /**
-         * 是否是叔叔节点
+         * 获取叔叔节点
          *
          * @return
          */
@@ -69,7 +69,7 @@ public class RedBlackTree {
             if (parent == null || parent.parent == null) {
                 return null;
             }
-            if (parent.isLetChild()) {
+            if (parent.isLeftChild()) {
                 return parent.parent.right;
             } else {
                 return parent.parent.left;
@@ -85,7 +85,7 @@ public class RedBlackTree {
             if (parent == null) {
                 return null;
             }
-            if (this.isLetChild()) {
+            if (this.isLeftChild()) {
                 return parent.right;
             } else {
                 return parent.left;
@@ -210,7 +210,7 @@ public class RedBlackTree {
 
 
     /**
-     * 删除的是双红 后的平衡处理
+     * 添加后是双红 的平衡处理
      *
      * @param node
      */
@@ -224,44 +224,47 @@ public class RedBlackTree {
         if (isBlack(node.parent)) {
             return;
         }
-        //插入节点的父亲为红色 触发红红相邻
-        //case 3 叔叔为红色
-        // 父亲变为黑色 为了保证黑色平衡 连带的叔叔也变成黑色
-        // 祖父如果黑色不变 会造成这颗子树黑色过多 因此祖父节点变成红色
-        // 祖父如果变成红色 可能会接着触发红红相邻 因此对将祖父及逆行递归调整
 
+        //插入节点的父亲为红色 触发红红相邻
         Node parent = node.parent;
         Node uncle = node.uncle();
         Node grandparent = parent.parent;
+        //case 3 叔叔为红色
         if (isRed(uncle)) {
+            // 父亲变为黑色 为了保证黑色平衡 连带的叔叔也变成黑色
             parent.color = BLACK;
             uncle.color = BLACK;
+            // 祖父如果黑色不变 会造成这颗子树黑色过多 因此祖父节点变成红色
             grandparent.color = RED;
+            // 祖父如果变成红色 可能会接着触发红红相邻 因此对将祖父进行递归调整
             fixRedRed(grandparent);
             return;
         }
         //case 4 叔叔为黑色
         //父亲为左孩子 插入节点也是左孩子 此时即LL不平衡
-        //父亲为左孩子 插入节点是右孩子 此时即LR不平衡
-        //父亲为右孩子 插入节点也是右孩子 此时即RR不平衡
-        //父亲为右孩子 插入节点是左孩子 此时即RL不平衡
-        if (parent.isLetChild() && node.isLetChild()) { //LL
+        if (parent.isLeftChild() && node.isLeftChild()) { //LL
             //修改颜色
             parent.color = BLACK;
             grandparent.color = RED;
             //右旋
             rightRotate(grandparent);
-        } else if (parent.isLetChild() /*&& !node.isLetChild()*/) { //LR
-            rightRotate(parent);
+        }
+        //父亲为左孩子 插入节点是右孩子 此时即LR不平衡
+        else if (parent.isLeftChild() /*&& !node.isLetChild()*/) { //LR
+            leftRotate(parent);
             node.color = BLACK;
             grandparent.color = RED;
             rightRotate(grandparent);
 
-        } else if ( /*!parent.isLetChild() && */ !node.isLetChild()) { //RR
+        }
+        //父亲为右孩子 插入节点也是右孩子 此时即RR不平衡
+        else if ( /*!parent.isLetChild() && */ !node.isLeftChild()) { //RR
             parent.color = BLACK;
             grandparent.color = RED;
             leftRotate(grandparent);
-        } else {  //RL
+        }
+        //父亲为右孩子 插入节点是左孩子 此时即RL不平衡
+        else {  //RL
             rightRotate(parent);
             node.color = BLACK;
             grandparent.color = RED;
@@ -307,7 +310,7 @@ public class RedBlackTree {
         //case 3 被调整节点的兄弟是红色
         if (isRed(sibling)) {
             //如果被调整节点是左孩子 就左旋 是右孩子就右旋
-            if (node.isLetChild()) {
+            if (node.isLeftChild()) {
                 leftRotate(parent);
             } else {
                 rightRotate(parent);
@@ -332,25 +335,25 @@ public class RedBlackTree {
                 }
             } else { //case 5 兄弟是黑色 侄子是红色
                 //如果兄弟是左孩子 左侄子是红色 LL
-                if (sibling.isLetChild() && isRed(sibling.left)) {
+                if (sibling.isLeftChild() && isRed(sibling.left)) {
                     rightRotate(parent);
                     sibling.left.color = BLACK;
                     sibling.color = parent.color;
                 }
                 //如果兄弟是左孩子 右侄子是红色 LR
-                else if (sibling.isLetChild() && isRed(sibling.right)) {
+                else if (sibling.isLeftChild() && isRed(sibling.right)) {
                     sibling.right.color = parent.color;
                     leftRotate(sibling);
                     rightRotate(parent);
 
                 }
-                //如果兄弟是右孩子 右侄子是红色 RR
-                else if (!sibling.isLetChild() && isRed(sibling.left)) {
+                //如果兄弟是右孩子 右侄子是红色 RL
+                else if (!sibling.isLeftChild() && isRed(sibling.left)) {
                     sibling.left.color = parent.color;
                     rightRotate(sibling);
                     leftRotate(parent);
                 }
-                //如果兄弟是右孩子 左侄子是红色 RL
+                //如果兄弟是右孩子 左侄子是红色 RR
                 else {
                     leftRotate(parent);
                     sibling.right.color = BLACK;
@@ -392,8 +395,8 @@ public class RedBlackTree {
                 } else { //要删除的不是黑色
                     //红色叶子 无需任何处理
                 }
-
-                if (deleted.isLetChild()) { //被删除节点是左孩子
+                //被删除节点是左孩子
+                if (deleted.isLeftChild()) {
                     //父节点的左孩子置空
                     parent.left = null;
                 } else { //删除节点是右孩子
@@ -414,7 +417,8 @@ public class RedBlackTree {
                 root.left = null;
                 root.right = null;
             } else { //删除的不是根节点 有一个孩子
-                if (deleted.isLetChild()) { //被删除节点是父节点的左孩子
+                //被删除节点是父节点的左孩子
+                if (deleted.isLeftChild()) {
                     //将删剩下的给父节点
                     parent.left = replaced;
                 } else {//被删除节点是父节点的右孩子
@@ -423,7 +427,7 @@ public class RedBlackTree {
                 }
                 //更改删剩下的父节点
                 replaced.parent = parent;
-                //将删出节点的左右 父亲都置空
+                //将删除节点的左右 父亲都置空
                 deleted.left = null;
                 deleted.right = null;
                 deleted.parent = null;
@@ -442,7 +446,7 @@ public class RedBlackTree {
 
             return;
         }
-        //case 0 有两个孩子 => z转换成只有一个孩子 或者没有孩子的节点
+        //case 0 有两个孩子 => 转换成只有一个孩子 或者没有孩子的节点
         //交换删除节点 和后继节点的键值
         int t = deleted.key;
         deleted.key = replaced.key;

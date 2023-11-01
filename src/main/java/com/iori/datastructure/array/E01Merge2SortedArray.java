@@ -21,37 +21,38 @@ public class E01Merge2SortedArray {
         //int[] nums1 = {1, 2, 3, 0, 0, 0};
         //int[] nums2 = {2, 5, 6};
         //merge3(nums1, 3, nums2, 3);
+        //System.out.println(Arrays.toString(nums1));
     }
 
 
     /**
      * 逆向双指针法
      */
-    //public static int[] merge3(int[] nums1, int m, int[] nums2, int n) {
-    //    int i = m - 1, j = n - 1;
-    //    int tail = m + n - 1;
-    //    int cur;
-    //    while (i >= 0 || j >= 0) {
-    //        if (i == -1) {
-    //            cur = nums2[j];
-    //            j--;
-    //        } else if (j == -1) {
-    //            cur = nums1[i];
-    //            i--;
-    //        } else if (nums1[i] > nums2[j]) {
-    //            cur = nums1[i];
-    //            i--;
-    //        } else {
-    //            cur = nums2[j];
-    //            j--;
-    //        }
-    //        nums1[tail] = cur;
-    //        tail--;
-    //    }
-    //
-    //    return nums1;
-    //
-    //}
+    public static int[] merge3(int[] nums1, int m, int[] nums2, int n) {
+        int i = m - 1, j = n - 1;
+        int tail = m + n - 1;
+        int cur;
+        while (i >= 0 || j >= 0) {
+            if (i == -1) {
+                cur = nums2[j];
+                j--;
+            } else if (j == -1) {
+                cur = nums1[i];
+                i--;
+            } else if (nums1[i] > nums2[j]) {
+                cur = nums1[i];
+                i--;
+            } else {
+                cur = nums2[j];
+                j--;
+            }
+            nums1[tail] = cur;
+            tail--;
+        }
+
+        return nums1;
+
+    }
 
     /**
      * 双指针方法
@@ -64,7 +65,7 @@ public class E01Merge2SortedArray {
      * @param array2
      */
     public static void merge3(int[] array1, int i, int iend, int j, int jend, int[] array2) {
-        int k = 0;
+        int k = i;
         while (i <= iend && j <= jend) {
             if (array1[i] < array1[j]) {
                 array2[k] = array1[i];

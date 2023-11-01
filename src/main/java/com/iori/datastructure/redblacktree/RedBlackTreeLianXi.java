@@ -8,84 +8,47 @@ import static com.iori.datastructure.redblacktree.RedBlackTreeLianXi.Color.RED;
  */
 public class RedBlackTreeLianXi {
 
-    //左倾红黑树 2-3树
-
     enum Color {
         RED, BLACK;
     }
 
-    Node root;
-
-    public static class Node {
+    static class Node {
         int key;
         Object value;
         Node left;
         Node right;
         Node parent;
-        Color color = Color.RED;
+        Color color = RED;
 
-        public Node(int key) {
-            this.key = key;
-        }
 
         public Node(int key, Object value) {
             this.key = key;
             this.value = value;
         }
 
-        public Node(int key, Color color) {
-            this.key = key;
-            this.color = color;
-        }
-
-        public Node(int key, Color color, Node left, Node right) {
-            this.key = key;
-            this.left = left;
-            this.right = right;
-            this.color = color;
-            if (left != null) {
-                left.parent = this;
-            }
-            if (right != null) {
-                right.parent = this;
-            }
-        }
-
-        /**
-         * 是否是左孩子
-         *
-         * @return
-         */
-        boolean isLetChild() {
+        //是否是左孩子
+        boolean isLeftChild() {
             return parent != null && parent.left == this;
         }
 
-        /**
-         * 是否是叔叔节点
-         *
-         * @return
-         */
+        //叔叔节点
         Node uncle() {
             if (parent == null || parent.parent == null) {
                 return null;
             }
-            if (parent.isLetChild()) {
+            if ((parent.isLeftChild())) {
                 return parent.parent.right;
             } else {
                 return parent.parent.left;
             }
         }
 
-        /**
-         * 查找兄弟节点
-         *
-         * @return
-         */
+        //兄弟节点
         Node sibling() {
             if (parent == null) {
                 return null;
             }
-            if (this.isLetChild()) {
+            if (parent.left == this) {
                 return parent.right;
             } else {
                 return parent.left;
@@ -93,46 +56,32 @@ public class RedBlackTreeLianXi {
         }
     }
 
-    /**
-     * 判断节点是否是红色
-     *
-     * @param node
-     * @return
-     */
+    Node root;
+
+
+    //判断节点是红
     boolean isRed(Node node) {
         return node != null && node.color == RED;
     }
 
-    /**
-     * 判断节点是否是黑色
-     *
-     * @param node
-     * @return
-     */
+    //判断节点是黑
     boolean isBlack(Node node) {
-        //return !isRed(node);
         return node == null || node.color == BLACK;
     }
 
-    /**
-     * 右旋方法
-     * 1.parent 的处理 2.旋转后新根的父子关系
-     *
-     * @param pink
-     */
+    //右旋
     private void rightRotate(Node pink) {
         Node parent = pink.parent;
 
         Node yellow = pink.left;
         Node green = yellow.right;
-        //该节点有可能为hull 所以得加判断
         if (green != null) {
-            green.parent = pink;  //处理父节点
+            green.parent = pink;
         }
         yellow.right = pink;
-        yellow.parent = parent; //处理父节点
+        yellow.parent = parent;
         pink.left = green;
-        pink.parent = yellow;  //处理父节点
+        pink.parent = yellow;
 
         if (parent == null) {
             root = yellow;
@@ -144,13 +93,8 @@ public class RedBlackTreeLianXi {
 
     }
 
-    /**
-     * 左旋方法
-     *
-     * @param pink
-     */
+    //左旋
     private void leftRotate(Node pink) {
-
         Node parent = pink.parent;
 
         Node yellow = pink.right;
@@ -172,17 +116,10 @@ public class RedBlackTreeLianXi {
         }
     }
 
-    /**
-     * 新增方法
-     * 正常增 遇到红红不平衡进行调整
-     *
-     * @param key   - 键
-     * @param value - 值
-     */
-    public void put(int key, Object value) {
+    //添加方法
+    public void put(int key, int value) {
         Node p = root;
         Node parent = null;
-
         while (p != null) {
             parent = p;
             if (key < p.key) {
@@ -190,46 +127,40 @@ public class RedBlackTreeLianXi {
             } else if (key > p.key) {
                 p = p.right;
             } else {
-                p.value = value;  //更新
+                //找到了 替换
+                p.value = value;
                 return;
             }
         }
-
         Node inserted = new Node(key, value);
         if (parent == null) {
             root = inserted;
         } else if (key < parent.key) {
             parent.left = inserted;
-            inserted.parent = parent; //处理父节点
+            inserted.parent = parent;
         } else {
             parent.right = inserted;
-            inserted.parent = parent; //处理父节点
+            inserted.parent = parent;
         }
+
+        //平衡
         fixRedRed(inserted);
+
     }
 
-
-    /**
-     * 删除的是双红 后的平衡处理
-     *
-     * @param node
-     */
+    //红红相邻 平衡
     private void fixRedRed(Node node) {
-        //case 1 插入节点是根节点 变黑即可
+        //如果是根节点 直接变黑
         if (node == root) {
             node.color = BLACK;
             return;
         }
-        //case 2 插入节点父亲是黑色 无需调整
+        //如果父节点是黑色 则不用变
         if (isBlack(node.parent)) {
             return;
         }
-        //插入节点的父亲为红色 触发红红相邻
-        //case 3 叔叔为红色
-        // 父亲变为黑色 为了保证黑色平衡 连带的叔叔也变成黑色
-        // 祖父如果黑色不变 会造成这颗子树黑色过多 因此祖父节点变成红色
-        // 祖父如果变成红色 可能会接着触发红红相邻 因此对将祖父及逆行递归调整
-
+        //走到这里说明父节点是红色
+        //父节点是红色  看叔叔节点是红色吗 是直接变色 不是进行旋转调整
         Node parent = node.parent;
         Node uncle = node.uncle();
         Node grandparent = parent.parent;
@@ -237,33 +168,36 @@ public class RedBlackTreeLianXi {
             parent.color = BLACK;
             uncle.color = BLACK;
             grandparent.color = RED;
+
+            //有可能祖父节点也触发红红 递归调整 直到根节点
             fixRedRed(grandparent);
             return;
         }
-        //case 4 叔叔为黑色
-        //父亲为左孩子 插入节点也是左孩子 此时即LL不平衡
-        //父亲为左孩子 插入节点是右孩子 此时即LR不平衡
-        //父亲为右孩子 插入节点也是右孩子 此时即RR不平衡
-        //父亲为右孩子 插入节点是左孩子 此时即RL不平衡
-        if (parent.isLetChild() && node.isLetChild()) { //LL
-            //修改颜色
+
+        //叔叔节点不是红色 分四种情况
+        //父节点是左孩子  插入节点也是左孩子 LL
+        if (parent.isLeftChild() && node.isLeftChild()) {
             parent.color = BLACK;
             grandparent.color = RED;
-            //右旋
             rightRotate(grandparent);
-        } else if (parent.isLetChild() /*&& !node.isLetChild()*/) { //LR
-            rightRotate(parent);
+        }
+        //父节点是左孩子  插入节点是右孩子 LR
+        else if (parent.isLeftChild() && !node.isLeftChild()) {
+            leftRotate(parent);
             node.color = BLACK;
             grandparent.color = RED;
             rightRotate(grandparent);
-
-        } else if ( /*!parent.isLetChild() && */ !node.isLetChild()) { //RR
-            parent.color = BLACK;
+        }
+        //父节点是右孩子  插入节点是左孩子 RL
+        else if (!parent.isLeftChild() && node.isLeftChild()) {
+            rightRotate(parent);
+            node.color = BLACK;
             grandparent.color = RED;
             leftRotate(grandparent);
-        } else {  //RL
-            rightRotate(parent);
-            node.color = BLACK;
+        }
+        //父节点是右孩子  插入节点也是右孩子 RR
+        else {
+            parent.color = BLACK;
             grandparent.color = RED;
             leftRotate(grandparent);
         }
@@ -272,199 +206,171 @@ public class RedBlackTreeLianXi {
     }
 
 
-    /**
-     * 删除
-     * 正常删 会用到李代桃僵技巧 遇到黑黑不平衡进行调整
-     *
-     * @param key 键
-     */
+    //删除
     public void remove(int key) {
         Node deleted = find(key);
         if (deleted == null) {
             return;
         }
+
         doRemove(deleted);
-    }
-
-    public boolean contains(int key) {
-        return find(key) != null;
-    }
-
-    /**
-     * 删除的是双黑 后的平衡处理
-     *
-     * @param node
-     */
-    private void fixDoubleBlack(Node node) {
-        //调整到树的顶部了
-        if (node == root) {
-            return;
-        }
-        //拿到父亲和兄弟
-        Node parent = node.parent;
-        Node sibling = node.sibling();
-
-        //case 3 被调整节点的兄弟是红色
-        if (isRed(sibling)) {
-            //如果被调整节点是左孩子 就左旋 是右孩子就右旋
-            if (node.isLetChild()) {
-                leftRotate(parent);
-            } else {
-                rightRotate(parent);
-            }
-            parent.color = RED;
-            sibling.color = BLACK;
-            //递归
-            fixDoubleBlack(node);
-            return;
-        }
-        //case 4 被调整节点的兄弟是黑色 两个侄子都是黑色
-        if (sibling != null) {
-            if (isBlack(sibling.left) && isBlack(sibling.right)) {
-                // 将兄弟变红  目的是将删除节点和兄弟那边的黑色高度同时减少1
-                sibling.color = RED;
-                //如果父亲是红 则需将父亲变为黑,避免红红 此时路径黑节点数目不变
-                if (isRed(parent)) {
-                    parent.color = BLACK;
-                } else {
-                    //如果父亲是黑 说明这条路径还是少黑,再次让父亲节点触发双黑
-                    fixDoubleBlack(parent);
-                }
-            } else { //case 5 兄弟是黑色 侄子是红色
-                //如果兄弟是左孩子 左侄子是红色 LL
-                if (sibling.isLetChild() && isRed(sibling.left)) {
-                    rightRotate(parent);
-                    sibling.left.color = BLACK;
-                    sibling.color = parent.color;
-                }
-                //如果兄弟是左孩子 右侄子是红色 LR
-                else if (sibling.isLetChild() && isRed(sibling.right)) {
-                    sibling.right.color = parent.color;
-                    leftRotate(sibling);
-                    rightRotate(parent);
-
-                }
-                //如果兄弟是右孩子 右侄子是红色 RR
-                else if (!sibling.isLetChild() && isRed(sibling.left)) {
-                    sibling.left.color = parent.color;
-                    rightRotate(sibling);
-                    leftRotate(parent);
-                }
-                //如果兄弟是右孩子 左侄子是红色 RL
-                else {
-                    leftRotate(parent);
-                    sibling.right.color = BLACK;
-                    sibling.color = parent.color;
-                }
-
-                parent.color = BLACK;
-
-            }
-        } else {
-            //让父亲去做递归调整
-            fixDoubleBlack(parent);
-        }
-
 
     }
 
-    /**
-     * 递归删除逻辑
-     *
-     * @param deleted
-     */
+    //递归删除
     private void doRemove(Node deleted) {
-        //拿到删剩下的
+        //先拿到剩下的
         Node replaced = findReplaced(deleted);
-        //删除节点的父节点
+        //拿到待删除节点的父亲
         Node parent = deleted.parent;
-        //没有孩子
+
+        //case 1 被删除节点没有孩子
         if (replaced == null) {
-            //case 1
-            if (deleted == root) { ////删除的是根节点
+            //被删除的是根节点
+            if (deleted == root) {
                 root = null;
-            } else { // 删除的不是根节点 并且没有孩子
-                //判断删除节点是不是黑色
-                if (isBlack(deleted)) { //是黑色
+            } else {
+
+                //删除的是黑色
+                if (isBlack(deleted)) {
                     //复杂调整
-                    //先调整 在删除 deleted
                     fixDoubleBlack(deleted);
-                } else { //要删除的不是黑色
-                    //红色叶子 无需任何处理
+                } else {
+                    //删除的是红色
+
                 }
 
-                if (deleted.isLetChild()) { //被删除节点是左孩子
-                    //父节点的左孩子置空
+                if (deleted.isLeftChild()) {
                     parent.left = null;
-                } else { //删除节点是右孩子
-                    //父节点的右孩子置空
+                } else {
                     parent.right = null;
                 }
-                //删除节点的父亲置空
-                deleted.parent = null;
+                deleted.left = deleted.right = deleted.parent = null;
+
+
             }
+
             return;
         }
-        //有一个孩子的情况
+
+
+        //case 2 被删除节点有一个孩子
         if (deleted.left == null || deleted.right == null) {
-            //case 1
-            if (deleted == root) { //删除的是根节点
+            if (deleted == root) {
                 root.key = replaced.key;
                 root.value = replaced.value;
-                root.left = null;
-                root.right = null;
-            } else { //删除的不是根节点 有一个孩子
-                if (deleted.isLetChild()) { //被删除节点是父节点的左孩子
-                    //将删剩下的给父节点
+                root.left = root.right = null;
+            } else {
+                if (deleted.isLeftChild()) {
                     parent.left = replaced;
-                } else {//被删除节点是父节点的右孩子
-                    //将删剩下的给父节点
+                } else {
                     parent.right = replaced;
                 }
-                //更改删剩下的父节点
                 replaced.parent = parent;
-                //将删出节点的左右 父亲都置空
-                deleted.left = null;
-                deleted.right = null;
-                deleted.parent = null;
+                deleted.left = deleted.right = deleted.parent = null;
 
-                //如果被删除的是黑 并且剩下的也是黑
+                //删除的是黑色  并且剩下的也是黑
                 if (isBlack(deleted) && isBlack(replaced)) {
-                    //做复杂处理
-                    //先删除了 然后在调整 replaced
+                    //复杂调整
                     fixDoubleBlack(replaced);
-
-                } else {
-                    //case 2 删的是黑 剩下的是红
+                } else { //删除的是黑色 剩下的是红色
+                    //case 2
                     replaced.color = BLACK;
                 }
             }
 
             return;
         }
-        //case 0 有两个孩子 => z转换成只有一个孩子 或者没有孩子的节点
-        //交换删除节点 和后继节点的键值
-        int t = deleted.key;
+
+
+        //case 3 被删除节点有两个孩子  //转换成一个孩子 或者 没有孩子
+
+        int temp = deleted.key;
         deleted.key = replaced.key;
-        replaced.key = t;
+        replaced.key = temp;
 
         Object v = deleted.value;
         deleted.value = replaced.value;
         replaced.value = v;
 
         //递归删除
-        doRemove(replaced);
+        doRemove(deleted);
+    }
+
+    //删除节点和剩下节点都是黑色的 触发双黑
+    private void fixDoubleBlack(Node node) {
+        if (node == root) {
+            return;
+        }
+
+
+        Node parent = node.parent;
+        Node sibling = node.sibling();
+
+        //case 3 兄弟节点是红色
+        if (isRed(sibling)) {
+            //被调整节点是左孩子 左旋
+            if (node.isLeftChild()) {
+                leftRotate(parent);
+            } else { //是右孩子 右旋
+                rightRotate(parent);
+            }
+            //父亲变红 兄弟变黑
+            parent.color = RED;
+            sibling.color = BLACK;
+            //递归
+            fixDoubleBlack(node);
+            return;
+        }
+        //兄弟节点不为null
+        if (sibling != null) {
+            //case 4 兄弟是黑色 并且两侄子都是黑色
+            if (isBlack(sibling.left) && isBlack(sibling.right)) {
+                sibling.color = RED;
+                if (isRed(parent)) {//如果父亲是红色 直接变黑
+                    parent.color = BLACK;
+                } else {
+                    fixDoubleBlack(parent); //否则递归继续触发双黑
+                }
+            }
+            //case 5 兄弟是黑色 侄子是红色
+            else {
+                //兄弟是左孩子 左侄子是红色 LL
+                if (sibling.isLeftChild() && isRed(sibling.left)) {
+                    rightRotate(parent);
+                    sibling.left.color = BLACK;
+                    sibling.color = parent.color;
+                }
+                //兄弟是左孩子 右侄子是红色 LR
+                else if (sibling.isLeftChild() && isRed(sibling.right)) {
+                    sibling.right.color = parent.color;
+                    leftRotate(sibling);
+                    rightRotate(parent);
+                }
+                //兄弟是右孩子 右侄子是红色 RR
+                else if (!sibling.isLeftChild() && isRed(sibling.right)) {
+                    leftRotate(parent);
+                    sibling.right.color = BLACK;
+                    sibling.color = parent.color;
+                }
+                //兄弟是右孩子 左侄子是红色 RL
+                else {
+                    sibling.left.color = parent.color;
+                    leftRotate(sibling);
+                    rightRotate(parent);
+
+                }
+                parent.color = BLACK;
+            }
+        } else {
+            fixDoubleBlack(parent);
+        }
+
 
     }
 
-
-    /**
-     * 查找删除节点
-     *
-     * @param key
-     * @return
-     */
-    private Node find(int key) {
+    //查找删除节点
+    public Node find(int key) {
         Node p = root;
         while (p != null) {
             if (key < p.key) {
@@ -478,13 +384,9 @@ public class RedBlackTreeLianXi {
         return null;
     }
 
-    /**
-     * 查找剩余节点
-     *
-     * @param deleted
-     * @return
-     */
-    private Node findReplaced(Node deleted) {
+    //查找后继节点 删剩下的
+    public Node findReplaced(Node deleted) {
+
         if (deleted.left == null && deleted.right == null) {
             return null;
         }
@@ -494,7 +396,6 @@ public class RedBlackTreeLianXi {
         if (deleted.right == null) {
             return deleted.left;
         }
-
         Node s = deleted;
         while (s.left != null) {
             s = s.left;
@@ -503,5 +404,38 @@ public class RedBlackTreeLianXi {
 
     }
 
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
