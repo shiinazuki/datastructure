@@ -2,6 +2,7 @@ package com.iori.algorithm.sort.lianxi;
 
 
 import java.util.Arrays;
+import java.util.Map;
 
 /**
  * <h3>归并排序 BottomUp</h3>
@@ -9,7 +10,7 @@ import java.util.Arrays;
 public class MergeSortBottomUpLianXi {
 
     public static void main(String[] args) {
-        int[] a = {9, 3, 7, 2, 8, 5, 1, 4};
+        int[] a = {9, 3, 7, 6, 2, 8, 5, 1, 4};
         System.out.println(Arrays.toString(a));
         sort(a);
         System.out.println(Arrays.toString(a));
@@ -35,6 +36,7 @@ public class MergeSortBottomUpLianXi {
     a2 临时数组
  */
     public static void merge(int[] array1, int i, int iend, int j, int jend, int[] array2) {
+
 
     }
 

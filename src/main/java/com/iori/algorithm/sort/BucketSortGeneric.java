@@ -34,7 +34,7 @@ public class BucketSortGeneric {
             }
         }
         //1.准备桶
-        DynamicArray[] buckets = new DynamicArray[max - min / range + 1];
+        DynamicArray[] buckets = new DynamicArray[(max - min )/ range + 1];
         for (int i = 0; i < buckets.length; i++) {
             buckets[i] = new DynamicArray();
         }

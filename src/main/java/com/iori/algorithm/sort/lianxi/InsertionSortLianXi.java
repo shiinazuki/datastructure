@@ -12,7 +12,6 @@ public class InsertionSortLianXi {
         int[] a = {6, 5, 4, 3, 2, 1};
         System.out.println(Arrays.toString(a));
         sort1(a);
-        //sort2(a);
         System.out.println(Arrays.toString(a));
     }
 
@@ -22,6 +21,7 @@ public class InsertionSortLianXi {
      * @param array
      */
     private static void sort2(int[] array) {
+
 
     }
 

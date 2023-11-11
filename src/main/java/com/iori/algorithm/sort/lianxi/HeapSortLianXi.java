@@ -20,13 +20,6 @@ public class HeapSortLianXi {
      * @param array
      */
     private static void sort(int[] array) {
-        int size = array.length;
-        heapify(array);
-        while (size > 1) {
-            swap(array, 0, size - 1);
-            size--;
-            down1(array, 0, size);
-        }
 
     }
 
@@ -49,6 +42,8 @@ public class HeapSortLianXi {
      * @param size
      */
     private static void down(int[] array, int parent, int size) {
+
+        int left = parent * 2 + 1;
 
 
     }

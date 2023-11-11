@@ -28,28 +28,25 @@ public class E02Leetcode3 {
         4.end - begin + 1 是当前子串长度
      */
 
-        String s = "abba";
+        String s = "pwwkew";
         System.out.println(lengthOfLongestSubstring(s));
 
     }
 
     public static int lengthOfLongestSubstring(String s) {
 
+        char[] chars = s.toCharArray();
         HashMap<Character, Integer> map = new HashMap<>();
-        int begin = 0;
         int maxLength = 0;
-        for (int end = 0; end < s.length(); end++) {
-            char ch = s.charAt(end);
-            if (map.containsKey(ch)) {
-                begin = Math.max(begin, map.get(ch) + 1);
-                map.put(ch, end);
-            } else {
-                //不存在则加入
-                map.put(ch, end);
+        int start = 0;
+        for (int end = 0; end < chars.length; end++) {
+            char c = chars[end];
+            if (map.containsKey(c)) {
+                start = Math.max(start, map.get(c) + 1);
             }
-            maxLength = Math.max(maxLength, end - begin + 1);
+            map.put(c, end);
+            maxLength = Math.max(maxLength,end - start + 1);
         }
-
         return maxLength;
     }
 

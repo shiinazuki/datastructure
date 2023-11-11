@@ -21,8 +21,7 @@ public class MergeSortToDownLianXi {
      * @param array
      */
     private static void sort(int[] array) {
-        int[] array2 = new int[array.length];
-        split(array, 0, array.length - 1, array2);
+
     }
 
     /**
@@ -33,8 +32,6 @@ public class MergeSortToDownLianXi {
      * @param right
      */
     private static void split(int[] array, int left, int right, int[] array2) {
-
-
 
     }
 
@@ -50,6 +47,7 @@ public class MergeSortToDownLianXi {
      * @param array2 临时数组
      */
     private static void merge(int[] array1, int i, int iend, int j, int jend, int[] array2) {
+
     }
 
 

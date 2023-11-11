@@ -20,8 +20,7 @@ public class MergeInsertionSortLianXi {
      * @param array
      */
     private static void sort(int[] array) {
-        int[] array2 = new int[array.length];
-        split(array, 0, array.length - 1, array2);
+
     }
 
     /**
@@ -33,7 +32,6 @@ public class MergeInsertionSortLianXi {
      */
     private static void split(int[] array, int left, int right, int[] array2) {
 
-
     }
 
     /**
@@ -42,6 +40,7 @@ public class MergeInsertionSortLianXi {
      * @param array
      */
     public static void insertion(int[] array) {
+
 
     }
 
@@ -56,6 +55,7 @@ public class MergeInsertionSortLianXi {
      * @param array2 第二个有序范围结尾
      */
     private static void merge(int[] array1, int i, int iend, int j, int jend, int[] array2) {
+
 
     }
 
