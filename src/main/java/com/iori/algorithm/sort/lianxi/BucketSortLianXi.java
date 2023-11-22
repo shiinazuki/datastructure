@@ -30,5 +30,7 @@ public class BucketSortLianXi {
     public static void sort(int[] ages) {
 
 
+
+
     }
 }

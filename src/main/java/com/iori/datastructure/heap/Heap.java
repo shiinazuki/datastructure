@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 /**
  * 可以扩容的 heap, max 用于指定是大顶堆还是小顶堆
+ *  true是大顶堆 false是小顶堆
  */
 public class Heap {
     int[] array;

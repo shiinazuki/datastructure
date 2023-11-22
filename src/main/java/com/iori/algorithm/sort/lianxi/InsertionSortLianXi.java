@@ -22,11 +22,10 @@ public class InsertionSortLianXi {
      */
     private static void sort2(int[] array) {
 
-
     }
 
     private static void sort1(int[] array) {
-        insertionSort(array, 0);
+       insertionSort(array,0);
     }
 
     /**
@@ -36,7 +35,6 @@ public class InsertionSortLianXi {
      * @param low
      */
     private static void insertionSort(int[] array, int low) {
-
 
     }
 

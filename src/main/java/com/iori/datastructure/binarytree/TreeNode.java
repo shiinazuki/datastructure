@@ -19,10 +19,19 @@ public class TreeNode {
         this.right = right;
     }
 
+
+    //@Override
+    //public String toString() {
+    //    return String.valueOf(this.val);
+    //}
+
     @Override
     public String toString() {
-        return String.valueOf(this.val);
+
+        return "TreeNode{" +
+                "val=" + val +
+                ", left=" + left +
+                ", right=" + right +
+                '}';
     }
-
-
 }

@@ -24,7 +24,6 @@ public class SelectionSortLianXi {
         // 1. 选择轮数 a.length - 1
         // 2. 交换的索引位置(right) 初始 a.length - 1, 每次递减
 
-
     }
 
 

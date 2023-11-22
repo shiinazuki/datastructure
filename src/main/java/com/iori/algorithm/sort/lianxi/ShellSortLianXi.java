@@ -20,6 +20,6 @@ public class ShellSortLianXi {
      * @param array
      */
     private static void sort(int[] array) {
-
     }
+
 }

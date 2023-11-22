@@ -56,7 +56,6 @@ public class MergeInsertionSortLianXi {
      */
     private static void merge(int[] array1, int i, int iend, int j, int jend, int[] array2) {
 
-
     }
 
 
