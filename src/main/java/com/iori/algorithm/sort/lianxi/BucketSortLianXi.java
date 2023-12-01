@@ -2,6 +2,7 @@ package com.iori.algorithm.sort.lianxi;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,9 +29,6 @@ public class BucketSortLianXi {
         9
      */
     public static void sort(int[] ages) {
-
-
-
 
     }
 }

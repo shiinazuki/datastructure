@@ -5,7 +5,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * <h3>零钱兑换 - 穷举解法</h3>
- * <p>凑成总金额的凑法中，需要硬币最少个数是几？</p>
+ * <reversePrint>凑成总金额的凑法中，需要硬币最少个数是几？</reversePrint>
  */
 public class ChangeMakingProblemLeetcode322 {
 

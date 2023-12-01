@@ -21,8 +21,6 @@ public class QuickSortHandleDuplicateLianXi {
     public static void sort(int[] array) {
     }
 
-
-
     private static void swap(int[] array, int i, int j) {
         int temp = array[i];
         array[i] = array[j];

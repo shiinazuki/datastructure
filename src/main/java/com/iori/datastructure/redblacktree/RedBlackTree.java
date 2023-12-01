@@ -6,7 +6,7 @@ import static com.iori.datastructure.redblacktree.RedBlackTree.Color.RED;
 /**
  * <h3>红黑树</h3>
  */
-public class RedBlackTree {
+public class RedBlackTree<K extends Comparable<K>, V> {
 
     //左倾红黑树 2-3树
 
@@ -14,31 +14,31 @@ public class RedBlackTree {
         RED, BLACK;
     }
 
-    Node root;
+    Node<K, V> root;
 
-    public static class Node {
-        int key;
-        Object value;
-        Node left;
-        Node right;
-        Node parent;
+    public static class Node<K, V> {
+        K key;
+        V value;
+        Node<K, V> left;
+        Node<K, V> right;
+        Node<K, V> parent;
         Color color = RED;
 
-        public Node(int key) {
+        public Node(K key) {
             this.key = key;
         }
 
-        public Node(int key, Object value) {
+        public Node(K key, V value) {
             this.key = key;
             this.value = value;
         }
 
-        public Node(int key, Color color) {
+        public Node(K key, Color color) {
             this.key = key;
             this.color = color;
         }
 
-        public Node(int key, Color color, Node left, Node right) {
+        public Node(K key, Color color, Node<K, V> left, Node<K, V> right) {
             this.key = key;
             this.left = left;
             this.right = right;
@@ -65,7 +65,7 @@ public class RedBlackTree {
          *
          * @return
          */
-        Node uncle() {
+        Node<K, V> uncle() {
             if (parent == null || parent.parent == null) {
                 return null;
             }
@@ -81,7 +81,7 @@ public class RedBlackTree {
          *
          * @return
          */
-        Node sibling() {
+        Node<K, V> sibling() {
             if (parent == null) {
                 return null;
             }
@@ -99,7 +99,7 @@ public class RedBlackTree {
      * @param node
      * @return
      */
-    boolean isRed(Node node) {
+    boolean isRed(Node<K, V> node) {
         return node != null && node.color == RED;
     }
 
@@ -109,7 +109,7 @@ public class RedBlackTree {
      * @param node
      * @return
      */
-    boolean isBlack(Node node) {
+    boolean isBlack(Node<K, V> node) {
         //return !isRed(node);
         return node == null || node.color == BLACK;
     }
@@ -120,11 +120,11 @@ public class RedBlackTree {
      *
      * @param pink
      */
-    private void rightRotate(Node pink) {
-        Node parent = pink.parent;
+    private void rightRotate(Node<K, V> pink) {
+        Node<K, V> parent = pink.parent;
 
-        Node yellow = pink.left;
-        Node green = yellow.right;
+        Node<K, V> yellow = pink.left;
+        Node<K, V> green = yellow.right;
         //该节点有可能为hull 所以得加判断
         if (green != null) {
             green.parent = pink;  //处理父节点
@@ -149,12 +149,12 @@ public class RedBlackTree {
      *
      * @param pink
      */
-    private void leftRotate(Node pink) {
+    private void leftRotate(Node<K, V> pink) {
 
-        Node parent = pink.parent;
+        Node<K, V> parent = pink.parent;
 
-        Node yellow = pink.right;
-        Node green = yellow.left;
+        Node<K, V> yellow = pink.right;
+        Node<K, V> green = yellow.left;
         if (green != null) {
             green.parent = pink;
         }
@@ -179,15 +179,16 @@ public class RedBlackTree {
      * @param key   - 键
      * @param value - 值
      */
-    public void put(int key, Object value) {
-        Node p = root;
-        Node parent = null;
+    public void put(K key, V value) {
+        Node<K, V> p = root;
+        Node<K, V> parent = null;
 
         while (p != null) {
             parent = p;
-            if (key < p.key) {
+            int result = key.compareTo(p.key);
+            if (result < 0) {
                 p = p.left;
-            } else if (key > p.key) {
+            } else if (result > 0) {
                 p = p.right;
             } else {
                 p.value = value;  //更新
@@ -195,10 +196,11 @@ public class RedBlackTree {
             }
         }
 
-        Node inserted = new Node(key, value);
+        Node<K, V> inserted = new Node<>(key, value);
+
         if (parent == null) {
             root = inserted;
-        } else if (key < parent.key) {
+        } else if (key.compareTo(parent.key) < 0) {
             parent.left = inserted;
             inserted.parent = parent; //处理父节点
         } else {
@@ -214,7 +216,7 @@ public class RedBlackTree {
      *
      * @param node
      */
-    private void fixRedRed(Node node) {
+    private void fixRedRed(Node<K, V> node) {
         //case 1 插入节点是根节点 变黑即可
         if (node == root) {
             node.color = BLACK;
@@ -226,9 +228,9 @@ public class RedBlackTree {
         }
 
         //插入节点的父亲为红色 触发红红相邻
-        Node parent = node.parent;
-        Node uncle = node.uncle();
-        Node grandparent = parent.parent;
+        Node<K, V> parent = node.parent;
+        Node<K, V> uncle = node.uncle();
+        Node<K, V> grandparent = parent.parent;
         //case 3 叔叔为红色
         if (isRed(uncle)) {
             // 父亲变为黑色 为了保证黑色平衡 连带的叔叔也变成黑色
@@ -250,7 +252,7 @@ public class RedBlackTree {
             rightRotate(grandparent);
         }
         //父亲为左孩子 插入节点是右孩子 此时即LR不平衡
-        else if (parent.isLeftChild() /*&& !node.isLetChild()*/) { //LR
+        else if (parent.isLeftChild() /*&& !node.isLeftChild()*/) { //LR
             leftRotate(parent);
             node.color = BLACK;
             grandparent.color = RED;
@@ -258,7 +260,7 @@ public class RedBlackTree {
 
         }
         //父亲为右孩子 插入节点也是右孩子 此时即RR不平衡
-        else if ( /*!parent.isLetChild() && */ !node.isLeftChild()) { //RR
+        else if ( /*!parent.isLeftChild() && */ !node.isLeftChild()) { //RR
             parent.color = BLACK;
             grandparent.color = RED;
             leftRotate(grandparent);
@@ -281,15 +283,15 @@ public class RedBlackTree {
      *
      * @param key 键
      */
-    public void remove(int key) {
-        Node deleted = find(key);
+    public void remove(K key) {
+        Node<K, V> deleted = find(key);
         if (deleted == null) {
             return;
         }
         doRemove(deleted);
     }
 
-    public boolean contains(int key) {
+    public boolean contains(K key) {
         return find(key) != null;
     }
 
@@ -298,14 +300,14 @@ public class RedBlackTree {
      *
      * @param node
      */
-    private void fixDoubleBlack(Node node) {
+    private void fixDoubleBlack(Node<K, V> node) {
         //调整到树的顶部了
         if (node == root) {
             return;
         }
         //拿到父亲和兄弟
-        Node parent = node.parent;
-        Node sibling = node.sibling();
+        Node<K, V> parent = node.parent;
+        Node<K, V> sibling = node.sibling();
 
         //case 3 被调整节点的兄弟是红色
         if (isRed(sibling)) {
@@ -376,11 +378,11 @@ public class RedBlackTree {
      *
      * @param deleted
      */
-    private void doRemove(Node deleted) {
+    private void doRemove(Node<K, V> deleted) {
         //拿到删剩下的
-        Node replaced = findReplaced(deleted);
+        Node<K, V> replaced = findReplaced(deleted);
         //删除节点的父节点
-        Node parent = deleted.parent;
+        Node<K, V> parent = deleted.parent;
         //没有孩子
         if (replaced == null) {
             //case 1
@@ -448,11 +450,11 @@ public class RedBlackTree {
         }
         //case 0 有两个孩子 => 转换成只有一个孩子 或者没有孩子的节点
         //交换删除节点 和后继节点的键值
-        int t = deleted.key;
+        K t = deleted.key;
         deleted.key = replaced.key;
         replaced.key = t;
 
-        Object v = deleted.value;
+        V v = deleted.value;
         deleted.value = replaced.value;
         replaced.value = v;
 
@@ -468,12 +470,13 @@ public class RedBlackTree {
      * @param key
      * @return
      */
-    private Node find(int key) {
-        Node p = root;
+    private Node<K, V> find(K key) {
+        Node<K, V> p = root;
         while (p != null) {
-            if (key < p.key) {
+            int result = key.compareTo(p.key);
+            if (result < 0) {
                 p = p.left;
-            } else if (key > p.key) {
+            } else if (result > 0) {
                 p = p.right;
             } else {
                 return p;
@@ -488,7 +491,7 @@ public class RedBlackTree {
      * @param deleted
      * @return
      */
-    private Node findReplaced(Node deleted) {
+    private Node<K, V> findReplaced(Node<K, V> deleted) {
         if (deleted.left == null && deleted.right == null) {
             return null;
         }
@@ -499,7 +502,7 @@ public class RedBlackTree {
             return deleted.left;
         }
 
-        Node s = deleted;
+        Node<K, V> s = deleted.right;
         while (s.left != null) {
             s = s.left;
         }

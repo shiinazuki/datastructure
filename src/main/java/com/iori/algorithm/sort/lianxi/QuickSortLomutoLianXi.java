@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 /**
  * <h3>单边循环快排（lomuto 洛穆托分区方案）</h3>
- * <p>核心思想：每轮找到一个基准点元素，把比它小的放到它左边，比它大的放到它右边，这称为分区</p>
+ * <reversePrint>核心思想：每轮找到一个基准点元素，把比它小的放到它左边，比它大的放到它右边，这称为分区</reversePrint>
  * <ol>
  * <li>选择最右元素作为基准点元素</li>
  * <li>j 找比基准点小的，i 找比基准点大的，一旦找到，二者进行交换</li>
@@ -26,7 +26,10 @@ public class QuickSortLomutoLianXi {
 
     //排序方法
     private static void sort(int[] array) {
+
     }
+
+
 
     private static void swap(int[] array, int i, int j) {
         int temp = array[i];

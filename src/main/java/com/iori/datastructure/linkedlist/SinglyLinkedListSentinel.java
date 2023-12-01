@@ -128,8 +128,8 @@ public class SinglyLinkedListSentinel implements Iterable<Integer> {
      */
 /*    public void test() {
         int i = 0;
-        for (Node p = head; p != null; p = p.next,i++) {
-            System.out.println(p.value + " 索引是 " + i);
+        for (Node reversePrint = head; reversePrint != null; reversePrint = reversePrint.next,i++) {
+            System.out.println(reversePrint.value + " 索引是 " + i);
         }
     }*/
 

@@ -24,32 +24,6 @@ public class MergeSortToDownLianXi {
 
     }
 
-    /**
-     * 递归方法
-     *
-     * @param array
-     * @param left
-     * @param right
-     */
-    private static void split(int[] array, int left, int right, int[] array2) {
-
-
-    }
-
-
-    /**
-     * 合并方法
-     *
-     * @param array1 原始数组
-     * @param i      第一个有序范围开始
-     * @param iend   第一个有序范围结尾
-     * @param j      第二个有序范围开始
-     * @param jend   第二个有序范围结尾
-     * @param array2 临时数组
-     */
-    private static void merge(int[] array1, int i, int iend, int j, int jend, int[] array2) {
-
-    }
 
 
 }

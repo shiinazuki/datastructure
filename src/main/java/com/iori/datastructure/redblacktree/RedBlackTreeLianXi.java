@@ -396,7 +396,7 @@ public class RedBlackTreeLianXi {
         if (deleted.right == null) {
             return deleted.left;
         }
-        Node s = deleted;
+        Node s = deleted.right;
         while (s.left != null) {
             s = s.left;
         }

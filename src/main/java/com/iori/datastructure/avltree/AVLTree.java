@@ -1,6 +1,7 @@
 package com.iori.datastructure.avltree;
 
 
+import java.util.LinkedList;
 import java.util.Stack;
 
 /**
@@ -54,7 +55,7 @@ public class AVLTree {
      * @param node
      */
     private void updateHeight(AVLNode node) {
-        //取左右孩子里最大的高度
+        //取左右孩子里最大的高度 + 1
         node.height = Integer.max(height(node.left), height(node.right)) + 1;
     }
 
@@ -90,6 +91,7 @@ public class AVLTree {
      */
 
     /**
+     * 右旋方法 LL不平衡
      * @param red 要旋转的节点
      * @return 新的根节点
      */
@@ -105,6 +107,7 @@ public class AVLTree {
     }
 
     /**
+     * 左旋方法 RR不平衡
      * @param red 要旋转的节点
      * @return 新的根节点
      */
@@ -184,7 +187,7 @@ public class AVLTree {
             return;
         }
         AVLNode current = root;
-        Stack<AVLNode> stack = new Stack<>();
+        LinkedList<AVLNode> stack = new LinkedList<>();
         //循环找插入位置 并插入
         while (current != null) {
             stack.push(current);
@@ -281,7 +284,7 @@ public class AVLTree {
 
         AVLNode current = root;
         AVLNode parent = null; //用来保存父节点
-        Stack<AVLNode> stack = new Stack<>();
+        LinkedList<AVLNode> stack = new LinkedList<>();
 
         while (current != null && current.key != key) {
             stack.push(current);
@@ -352,9 +355,6 @@ public class AVLTree {
     }
 
     */
-
-
-
     public void remove(int key) {
         root = doRemove(root, key);
     }

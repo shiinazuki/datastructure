@@ -11,7 +11,7 @@ public class BubbleSortLianXi {
         //int[] array = {6, 5, 4, 3, 2, 1};
         int[] array = {6, 5, 4, 3, 2, 1};
         System.out.println(Arrays.toString(array));
-        bubbleSort2(array);
+        bubbleSort(array);
         System.out.println(Arrays.toString(array));
 
     }
@@ -42,18 +42,9 @@ public class BubbleSortLianXi {
      * @param array
      */
     private static void bubbleSort(int[] array) {
-        bubble(array, array.length - 1);
-    }
-
-    /**
-     * 递归方法
-     *
-     * @param array
-     * @param j
-     */
-    private static void bubble(int[] array, int j) {
 
     }
+
 
 
 }

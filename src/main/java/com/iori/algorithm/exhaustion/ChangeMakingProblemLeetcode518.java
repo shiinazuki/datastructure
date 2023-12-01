@@ -6,7 +6,7 @@ import java.util.ListIterator;
 
 /**
  * <h3>零钱兑换 II - 穷举解法</h3>
- * <p>凑成总金额有几种凑法?</p>
+ * <reversePrint>凑成总金额有几种凑法?</reversePrint>
  */
 public class ChangeMakingProblemLeetcode518 {
 

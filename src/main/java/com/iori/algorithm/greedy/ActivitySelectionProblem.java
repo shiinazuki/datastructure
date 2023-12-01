@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * <h3>活动选择问题 - 贪心解法</h3>
- * <p>Leetcode 435 无重叠区间本质就是活动选择问题</p>
+ * <reversePrint>Leetcode 435 无重叠区间本质就是活动选择问题</reversePrint>
  */
 public class ActivitySelectionProblem {
 

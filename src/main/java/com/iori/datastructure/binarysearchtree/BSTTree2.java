@@ -10,7 +10,6 @@ import java.util.List;
  * Binary Search Tree 二叉搜索树
  * 二叉搜索树, 泛型 key 版本
  */
-@SuppressWarnings("all")
 public class BSTTree2<K extends Comparable<K>, V> {
 
     BSTNode<K, V> root; //根节点
@@ -30,7 +29,7 @@ public class BSTTree2<K extends Comparable<K>, V> {
             this.value = value;
         }
 
-        public BSTNode(K key, V value, BSTNode left, BSTNode right) {
+        public BSTNode(K key, V value, BSTNode<K, V> left, BSTNode<K, V> right) {
             this.key = key;
             this.value = value;
             this.left = left;
@@ -49,9 +48,9 @@ public class BSTTree2<K extends Comparable<K>, V> {
         BSTNode<K, V> p = root;
         while (p != null) {
 
-            //     -1 key < p.key
-            //     0 key = p.key
-            //     1 key > p.key
+            //     -1 key < reversePrint.key
+            //     0 key = reversePrint.key
+            //     1 key > reversePrint.key
 
             int result = key.compareTo(p.key);
             if (result < 0) {
@@ -97,7 +96,7 @@ public class BSTTree2<K extends Comparable<K>, V> {
     }
 
     /**
-     * 找最大值
+     * 找最小值
      *
      * @param node
      * @return
@@ -216,6 +215,29 @@ public class BSTTree2<K extends Comparable<K>, V> {
     }
 
     /**
+     * 新增 递归实现
+     * @param node
+     * @param key
+     * @param value
+     * @return
+     */
+    private BSTNode<K, V> doPut(BSTNode<K, V> node, K key, V value) {
+        if (node == null) {
+            return new BSTNode<>(key, value);
+        }
+        int result = key.compareTo(node.key);
+        if (result < 0) {
+            node.left = doPut(node.left, key, value);
+        } else if (result > 0) {
+            node.right = doPut(node.right, key, value);
+        } else {
+            node.value = value;
+        }
+        return node;
+
+    }
+
+    /**
      * <h3>查找关键字的前任值</h3>
      *
      * @param key 关键字
@@ -296,16 +318,13 @@ public class BSTTree2<K extends Comparable<K>, V> {
     public V remove(K key) {
         BSTNode<K, V> p = root;
         BSTNode<K, V> parent = null;
-        while (p != null) {
+        while (p != null && key.compareTo(p.key) != 0) {
             int result = key.compareTo(p.key);
+            parent = p;
             if (result < 0) {//往左找
-                parent = p;
                 p = p.left;
             } else if (result > 0) { //往右找
-                parent = p;
                 p = p.right;
-            } else {
-                break;
             }
         }
         //删除的节点不存在
@@ -340,6 +359,7 @@ public class BSTTree2<K extends Comparable<K>, V> {
         return p.value;
     }
 
+
     /**
      * 托孤方法
      *
@@ -370,11 +390,13 @@ public class BSTTree2<K extends Comparable<K>, V> {
         if (node == null) {
             return null;
         }
-        if (key.compareTo(node.key) < 0) { //往左
+        //往左
+        if (key.compareTo(node.key) < 0) {
             node.left = deRemove(node.left, key, result);
             return node;
         }
-        if (key.compareTo(node.key) > 0) { //往右
+        //往右
+        if (key.compareTo(node.key) > 0) {
             node.right = deRemove(node.right, key, result);
             return node;
         }

@@ -125,7 +125,7 @@ public class ArrayQueue3<E> implements Queue<E>, Iterable<E> {
 
             @Override
             public E next() {
-                //E value = array[(int) (Integer.toUnsignedLong(p) % array.length)];
+                //E value = array[(int) (Integer.toUnsignedLong(reversePrint) % array.length)];
                 E value = array[p & array.length - 1];
                 p++;
                 return value;

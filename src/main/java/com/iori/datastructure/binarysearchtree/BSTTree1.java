@@ -88,9 +88,9 @@ public class BSTTree1 {
       /*  if (root == null) {
             return null;
         }
-        BSTNode p = root;
-        while (p.left != null) {
-            p = p.left;
+        BSTNode reversePrint = root;
+        while (reversePrint.left != null) {
+            reversePrint = reversePrint.left;
         }*/
         return min(root);
     }
@@ -136,9 +136,9 @@ public class BSTTree1 {
        /* if (root == null) {
             return null;
         }
-        BSTNode p = root;
-        while (p.right != null) {
-            p = p.right;
+        BSTNode reversePrint = root;
+        while (reversePrint.right != null) {
+            reversePrint = reversePrint.right;
         }*/
         return max(root);
     }
@@ -206,8 +206,25 @@ public class BSTTree1 {
 
     }
 
+    /**
+     * 新增 递归实现
+     * @param node
+     * @param key
+     * @param value
+     * @return
+     */
     private BSTNode doPut(BSTNode node, int key, Object value) {
-        return null;
+        if (node == null) {
+            return new BSTNode(key, value);
+        }
+        if (key < node.key) {
+            node.left = doPut(node.left, key, value);
+        } else if (node.key < key) {
+            node.right = doPut(node.right, key, value);
+        } else {
+            node.value = value;
+        }
+        return node;
 
     }
 

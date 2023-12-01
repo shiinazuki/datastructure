@@ -14,7 +14,7 @@ public class ArrayStack<E> implements Stack<E>, Iterable<E> {
         底          顶
         0   1   2   3
         a   b   c   d
-                        p
+                        reversePrint
      */
 
 

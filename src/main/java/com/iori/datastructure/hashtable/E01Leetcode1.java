@@ -5,8 +5,8 @@ import java.util.HashMap;
 
 /**
  * 两数之和
- * <p>给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出和为目标值 target 的那两个整数，并返回它们的数组下标</p>
- * <p>注意：<b>只会存在一个有效答案</b></p>
+ * <reversePrint>给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出和为目标值 target 的那两个整数，并返回它们的数组下标</reversePrint>
+ * <reversePrint>注意：<b>只会存在一个有效答案</b></reversePrint>
  */
 public class E01Leetcode1 {
 

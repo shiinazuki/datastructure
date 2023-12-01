@@ -25,5 +25,6 @@ public class BucketSortGenericLianXi {
         3   9
      */
     public static void sort(int[] a, int range) {
+
     }
 }

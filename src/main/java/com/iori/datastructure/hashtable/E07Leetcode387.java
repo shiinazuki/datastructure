@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 /**
  * 字符串中的第一个不重复字符
  *
- * <p>s 中仅包含小写字符</p>
+ * <reversePrint>s 中仅包含小写字符</reversePrint>
  */
 public class E07Leetcode387 {
 

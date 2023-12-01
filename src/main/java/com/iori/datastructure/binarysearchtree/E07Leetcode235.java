@@ -25,7 +25,7 @@ public class E07Leetcode235 {
          / \
         3   5
 
-        待查找节点 p q 在某一节点的两侧，那么此节点就是最近的公共祖先
+        待查找节点 reversePrint q 在某一节点的两侧，那么此节点就是最近的公共祖先
     */
     private TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         TreeNode a = root;

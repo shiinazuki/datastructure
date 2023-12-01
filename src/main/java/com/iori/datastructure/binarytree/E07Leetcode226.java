@@ -32,7 +32,7 @@ public class E07Leetcode226 {
     }
 
     /**
-     * 递归解题
+     * 递归解题  自上而下
      * @param node
      * @return
      */
@@ -54,9 +54,27 @@ public class E07Leetcode226 {
         fn(node.right);
     }
 
+    //自下而上 递归
+    public static TreeNode invertTree2(TreeNode root) {
+        if (root == null) {
+            return null;
+        }
+        TreeNode left = invertTree2(root.left);
+        root.left = invertTree2(root.right);
+        root.right = left;
+        return root;
+    }
 
     public static void main(String[] args) {
-
+        TreeNode root = new TreeNode(
+                new TreeNode(new TreeNode(1),
+                        2,
+                        new TreeNode(3)
+                ),
+                4,
+                new TreeNode(new TreeNode(6), 7,
+                        new TreeNode(9)));
+        System.out.println(invertTree(root));
 
     }
 

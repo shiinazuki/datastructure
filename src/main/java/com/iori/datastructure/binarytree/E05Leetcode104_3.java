@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 /**
- * 二叉树最大深度 - 使用后序遍历(非递归)求解
+ * 二叉树最大深度 - 使用层序遍历(非递归)求解
  */
 public class E05Leetcode104_3 {
 

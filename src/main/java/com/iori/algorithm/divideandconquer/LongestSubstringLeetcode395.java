@@ -107,7 +107,7 @@ public class LongestSubstringLeetcode395 {
                 if (cnt[u] == k) {
                     sum++;
                 }
-                // 当区间所包含的字符种类数量 tot 超过了当前限定的数量 p，那么我们要删除掉一些字母，即「左指针」右移
+                // 当区间所包含的字符种类数量 tot 超过了当前限定的数量 reversePrint，那么我们要删除掉一些字母，即「左指针」右移
                 while (tot > p) {
                     int t = cs[left++] - 'a';
                     cnt[t]--;

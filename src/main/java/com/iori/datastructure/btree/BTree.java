@@ -1,6 +1,5 @@
 package com.iori.datastructure.btree;
 
-import com.iori.datastructure.linkedlist.ListNode;
 
 import java.util.Arrays;
 
@@ -330,7 +329,7 @@ public class BTree {
         }
         //当前节点不是叶子节点
         else {
-            //i找到了 代表待删除key的索引 i没找到 代表到第 i个节点的孩子节点继续查找
+            //i找到了 代表待删除key的索引,i没找到 代表到第 i个节点的孩子节点继续查找
             if (!found(node, key, i)) { //case 3 没找到 key
                 //去当前节点的第 i 个孩子继续查找
                 doRemove(node, node.children[i], i, key);

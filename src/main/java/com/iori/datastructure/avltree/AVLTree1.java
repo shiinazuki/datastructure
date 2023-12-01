@@ -2,6 +2,9 @@ package com.iori.datastructure.avltree;
 
 import java.util.Stack;
 
+/**
+ * AVL树 非递归实现
+ */
 public class AVLTree1 {
     private class Node {
         int key;
@@ -60,68 +63,7 @@ public class AVLTree1 {
     }
 
     public void insert(int key) {
-        Node newNode = new Node(key);
 
-        if (root == null) {
-            root = newNode;
-            return;
-        }
-
-        Node current = root;
-        Stack<Node> stack = new Stack<>();
-
-        while (current != null) {
-            stack.push(current);
-
-            if (key < current.key) {
-                if (current.left == null) {
-                    current.left = newNode;
-                    break;
-                }
-
-                current = current.left;
-            } else if (key > current.key) {
-                if (current.right == null) {
-                    current.right = newNode;
-                    break;
-                }
-
-                current = current.right;
-            } else {
-                return; // key already exists
-            }
-        }
-
-        while (!stack.isEmpty()) {
-            Node node = stack.pop();
-            node.height = Math.max(height(node.left), height(node.right)) + 1;
-
-            int balance = getBalance(node);
-
-            if (balance > 1 && key < node.left.key) {
-                node = rotateRight(node);
-            } else if (balance < -1 && key > node.right.key) {
-                node = rotateLeft(node);
-            } else if (balance > 1 && key > node.left.key) {
-                node.left = rotateLeft(node.left);
-                node = rotateRight(node);
-            } else if (balance < -1 && key < node.right.key) {
-                node.right = rotateRight(node.right);
-                node = rotateLeft(node);
-            }
-
-            if (stack.isEmpty()) {
-                root = node;
-            } else {
-                Node parent = stack.peek();
-
-                if (parent.left == node) {
-                    parent.left = node;
-                } else {
-                    parent.right = node;
-                }
-            }
-        }
     }
 
     public void delete(int key) {

@@ -1,7 +1,7 @@
 package com.iori.datastructure.avltree;
 
 
-import java.util.Stack;
+import java.util.LinkedList;
 
 /**
  * <h3>AVL 树</h3>
@@ -13,23 +13,24 @@ import java.util.Stack;
  */
 public class AVLTreeLianXi {
 
-    AVLNode root;
-
+    //节点类
     static class AVLNode {
         int key;
         Object value;
         AVLNode left;
         AVLNode right;
-        int height; //高度
+        int height = 1; //高度
+
+        public AVLNode() {
+        }
+
+        public AVLNode(int key) {
+            this.key = key;
+        }
 
         public AVLNode(int key, Object value) {
             this.key = key;
             this.value = value;
-        }
-
-        public AVLNode(AVLNode left, AVLNode right) {
-            this.left = left;
-            this.right = right;
         }
 
         public AVLNode(int key, Object value, AVLNode left, AVLNode right) {
@@ -40,61 +41,26 @@ public class AVLTreeLianXi {
         }
     }
 
-
-    /**
-     * 求节点的高度
-     *
-     * @param node
-     * @return
-     */
+    //求节点的高度
     private int height(AVLNode node) {
-        if (node == null) {
-            return 0;
-        }
-        return node.height;
+        return node == null ? 0 : node.height;
     }
 
-    /**
-     * 更新节点高度(新增,删除,旋转)
-     *
-     * @param node
-     */
+    //更新节点高度(新增,删除,旋转)
     private void updateHeight(AVLNode node) {
+        //取左右孩子里最大的高度 + 1
         node.height = Integer.max(height(node.left), height(node.right)) + 1;
     }
 
-    /**
-     * 求左右子树的高度差
-     * 平衡因子(balance factor) = 左子树高度 - 右子树高度
-     *
-     * @return
-     */
+    //求左右子树的高度差
     private int balanceFactor(AVLNode node) {
+        if (node == null) {
+            return 0;
+        }
         return height(node.left) - height(node.right);
     }
-    /*
-        0 1 -1 平衡的
-        >1 < -1不平衡
-     */
-    /*
-        LL 左左
-            -失衡节点(图中5 红色) 的balanceFactor > 1 即左边更高
-            -失衡节点的左孩子(图中3 黄色) 的 balanceFactor >= 0 即左孩子这边也是左边更高或等高
-        LR  左右
-            -失衡节点(图中6) 的balanceFactor > 1 即左边更高
-            -失衡节点的左孩子(图中2 红色) 的 balanceFactor < 0 即左孩子这边是右边更高
-        RL 右左
-            -失衡节点(图中2) 的balanceFactor < 1 即右边更高
-            -失衡节点的右孩子(图中6 红色) 的 balanceFactor > 0 即右孩子这边是左边更高
-        RR 右右
-            -失衡节点(图中2 红色) 的balanceFactor < -1 即右边更高
-            -失衡节点的右孩子(图中6 黄色) 的 balanceFactor <= 0 即右孩子这边是右边更高或等高
-     */
 
-    /**
-     * @param red 要旋转的节点
-     * @return 新的根节点
-     */
+    //LL不平衡 右旋方法
     private AVLNode rightRotate(AVLNode red) {
         AVLNode yellow = red.left;
         red.left = yellow.right;
@@ -104,10 +70,7 @@ public class AVLTreeLianXi {
         return yellow;
     }
 
-    /**
-     * @param red 要旋转的节点
-     * @return 新的根节点
-     */
+    //RR不平衡 左旋方法
     private AVLNode leftRotate(AVLNode red) {
         AVLNode yellow = red.right;
         red.right = yellow.left;
@@ -117,81 +80,105 @@ public class AVLTreeLianXi {
         return yellow;
     }
 
-    /**
-     * 先左旋左子树 在右旋根节点
-     *
-     * @param node
-     * @return
-     */
+    //LR不平衡  先旋转左子树 在右旋根节点
     private AVLNode leftRightRotate(AVLNode node) {
         node.left = leftRotate(node.left);
         return rightRotate(node);
     }
 
-    /**
-     * 先右旋右子树 在左旋根节点
-     *
-     * @param node
-     * @return
-     */
+    //RL不平衡 先右旋右子树 在左旋根节点
     private AVLNode rightLeftRotate(AVLNode node) {
         node.right = rightRotate(node.right);
         return leftRotate(node);
     }
 
-    /**
-     * 检查节点是否失衡 重新平衡代码
-     *
-     * @param node
-     * @return
-     */
+    //检查节点是否失衡 重新平衡
     private AVLNode balance(AVLNode node) {
         if (node == null) {
             return null;
         }
-        int bf = balanceFactor(node);
-        if (bf > 1 && balanceFactor(node.left) >= 0) {
+        int balanceFactor = balanceFactor(node);
+        if (balanceFactor > 1 && balanceFactor(node.left) >= 0) { //LL
             return rightRotate(node);
-        } else if (bf > 1 && balanceFactor(node.left) < 0) {
+        } else if (balanceFactor > 1 && balanceFactor(node.left) < 0) { //LR
             return leftRightRotate(node);
-        } else if (bf < -1 && balanceFactor(node.right) > 0) {
+        } else if (balanceFactor < -1 && balanceFactor(node.right) > 0) { //RL
             return rightLeftRotate(node);
-        } else if (bf < -1 && balanceFactor(node.right) <= 0) {
+        } else if (balanceFactor < -1 && balanceFactor(node.right) <= 0) { //RR
             return leftRotate(node);
         }
         return node;
     }
 
+    AVLNode root;
 
-    /**
-     * 添加元素  非递归写法
-     *
-     * @param key
-     * @param value
-     */
+    //添加节点方法 递归
     public void put(int key, Object value) {
+        //递归实现
         root = doPut(root, key, value);
+        //非递归实现
+        put(root, key, value);
     }
 
-    /**
-     * 添加递归实现
-     *
-     * @param node
-     * @param key
-     * @param value
-     * @return
-     */
+    //非递归实现添加
+    private void put(AVLNode node, int key, Object value) {
+        AVLNode newNode = new AVLNode(key, value);
+        if (root == null) {
+            root = newNode;
+            return;
+        }
+        AVLNode p = root;
+        LinkedList<AVLNode> stack = new LinkedList<>();
+        while (p != null) {
+            stack.push(p);
+            if (key < p.key) {
+                if (p.left == null) {
+                    p.left = newNode;
+                    break;
+                }
+                p = p.left;
+            } else if (key > p.key) {
+                if (p.right == null) {
+                    p.right = newNode;
+                    break;
+                }
+                p = p.right;
+            } else {
+                p.value = value;
+                return;
+            }
+        }
+
+        //平衡avl树
+        while (!stack.isEmpty()) {
+            AVLNode pop = stack.pop();
+            updateHeight(pop);
+            pop = balance(pop);
+            if (stack.isEmpty()) {
+                root = pop;
+            } else {
+                AVLNode parent = stack.peek();
+                if (parent.left == pop) {
+                    parent.left = pop;
+                } else {
+                    parent.right = pop;
+                }
+            }
+        }
+
+    }
+
+    //递归方法
     private AVLNode doPut(AVLNode node, int key, Object value) {
-        //如果为null  创建一个新节点返回
         if (node == null) {
             return new AVLNode(key, value);
         }
-        //如果找到 key了
+
         if (key == node.key) {
             node.value = value;
             return node;
         }
-        //3. 继续查找
+
         if (key < node.key) {
             node.left = doPut(node.left, key, value);
         } else {
@@ -201,40 +188,95 @@ public class AVLTreeLianXi {
         return balance(node);
     }
 
-    /**
-     * 删除方法
-     *
-     * @param key
-     */
     public void remove(int key) {
-        doRemove(root, key);
+        //递归删除
+        root = doRemove(root, key);
+        //迭代删除
+        remove(root, key);
     }
 
-    /**
-     * 递归删除
-     *
-     * @param node
-     * @param key
-     * @return
-     */
+    //迭代删除
+    private void remove(AVLNode node, int key) {
+        if (node == null) {
+            return;
+        }
+        AVLNode p = node;
+        AVLNode parent = null;
+        LinkedList<AVLNode> stack = new LinkedList<>();
+        while (p != null && p.key != key) {
+            stack.push(p);
+            if (key < p.key) {
+                parent = p;
+                p = p.left;
+            } else {
+                parent = p;
+                p = p.right;
+            }
+        }
+        if (p == null) {
+            return;
+        }
+        if (p.left == null && p.right == null) {
+            if (p == root) {
+                root = null;
+            } else if (parent.left == p) {
+                parent.left = null;
+            } else {
+                parent.right = null;
+            }
+        } else if (p.left != null && p.right != null) {
+            AVLNode successor = p.right;
+            while (successor.left != null) {
+                stack.push(successor);
+                successor = successor.left;
+            }
+            p.key = successor.key;
+            p = successor;
+            parent = stack.isEmpty() ? null : stack.peek();
+        } else {
+            AVLNode child = p.left != null ? p.left : p.right;
+            if (p == root) {
+                root = child;
+            } else if (parent.left == p) {
+                parent.left = child;
+            } else {
+                parent.right = child;
+            }
+        }
+        //平衡栈中的元素
+        while (!stack.isEmpty()) {
+            AVLNode pop = stack.pop();
+            pop = balance(pop);
+            if (stack.isEmpty()) {
+                root = pop;
+            } else {
+                AVLNode peek = stack.peek();
+                if (peek.left == pop) {
+                    peek.left = pop;
+                } else {
+                    peek.right = pop;
+                }
+            }
+        }
+    }
+
+    //递归删除方法
     private AVLNode doRemove(AVLNode node, int key) {
-        //1 节点为 null
         if (node == null) {
             return null;
         }
-        //2.没找到
+
         if (key < node.key) {
-            node = doRemove(node.left, key);
+            node.left = doRemove(node.left, key);
         } else if (key > node.key) {
-            node = doRemove(node.right, key);
+            node.right = doRemove(node.right, key);
         } else {
-            //3 找到了 1)只有有左孩子 2)只有右孩子 3)左右都有
             if (node.left == null && node.right == null) {
                 return null;
             } else if (node.left == null) {
                 node = node.right;
             } else if (node.right == null) {
-                node = node.left;
+                node =  node.left;
             } else {
                 AVLNode s = node.right;
                 while (s.left != null) {
@@ -245,9 +287,9 @@ public class AVLTreeLianXi {
                 node = s;
             }
         }
-
         updateHeight(node);
         return balance(node);
+
     }
 
 }

@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
 
 /**
  * <h2>哈希表</h2>
- * <p>给每份数据分配一个编号，放入表格（数组）。</p>
- * <p>建立编号与表格索引的关系，将来就可以通过编号快速查找数据</p>
+ * <reversePrint>给每份数据分配一个编号，放入表格（数组）。</reversePrint>
+ * <reversePrint>建立编号与表格索引的关系，将来就可以通过编号快速查找数据</reversePrint>
  * <ol>
  *  <li>理想情况编号当唯一，数组能容纳所有数据</li>
  *  <li>现实是不能说为了容纳所有数据造一个超大数组，编号也有可能重复</li>
  * </ol>
- * <p>
+ * <reversePrint>
  * 解决
  * <ol>
  *     <li>有限长度的数组，以【拉链】方式存储数据</li>
@@ -128,7 +128,7 @@ public class HashTable {
                     * 一个链表最多拆成两个
                     * hash & table.length == 0 的一组
                     * hash & table.length != 0 的一组
-                                              p
+                                              reversePrint
                     0->8->16->24->32->40->48->null
                                 a
                     0->16->32->48->null

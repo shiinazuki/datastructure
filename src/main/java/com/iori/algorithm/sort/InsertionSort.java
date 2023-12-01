@@ -12,7 +12,7 @@ public class InsertionSort {
         int[] a = {6, 5, 4, 3, 2, 1};
         System.out.println(Arrays.toString(a));
         //sort1(a);
-        sort2(a);
+        insert1(a);
         System.out.println(Arrays.toString(a));
     }
 
@@ -37,8 +37,9 @@ public class InsertionSort {
     }
 
     private static void sort1(int[] array) {
-        insertionSort(array,0);
+        insertionSort(array, 0);
     }
+
     /**
      * 递归插入排序
      *
@@ -63,6 +64,62 @@ public class InsertionSort {
             array[i + 1] = temp;
         }
         insertionSort(array, low + 1);
+    }
+
+
+    /**
+     * 插入排序 使用二分法优化
+     * @param nums
+     */
+    public static void insert(int[] nums) {
+        for (int k = 1; k < nums.length; k++) {
+            int i = 0, j = k - 1;
+
+            int temp = nums[k];
+            while (i <= j) {
+                int mid = (i + j) >>> 1;
+                if (nums[mid] < temp) {
+                    i = mid + 1;
+                } else {
+                    j = mid - 1;
+                }
+            }
+            for (int s = k - 1; s >= i; s--) {
+                nums[s + 1] = nums[s];
+            }
+            nums[i] = temp;
+        }
+    }
+
+    /**
+     * 插入排序 使用二分优化 递归版
+     * @param nums
+     */
+    public static void insert1(int[] nums) {
+        dfs(nums, 0);
+    }
+
+    private static void dfs(int[] nums, int low) {
+
+        if (low == nums.length) {
+            return;
+        }
+        int i = 0, j = low - 1;
+        int temp = nums[low];
+        while (i <= j) {
+            int mid = (i + j) >>> 1;
+            if (nums[mid] < temp) {
+                i = mid + 1;
+            } else {
+                j = mid - 1;
+            }
+        }
+
+        for (int k = low - 1; k >= i; k--) {
+            nums[k + 1] = nums[k];
+        }
+        nums[i] = temp;
+        dfs(nums, low + 1);
     }
 
 }

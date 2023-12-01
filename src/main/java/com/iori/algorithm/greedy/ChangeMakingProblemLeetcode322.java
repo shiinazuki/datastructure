@@ -2,7 +2,7 @@ package com.iori.algorithm.greedy;
 
 /**
  * <h3>零钱兑换 - 贪心解法</h3>
- * <p>贪心解法：可能得到错误的解</p>
+ * <reversePrint>贪心解法：可能得到错误的解</reversePrint>
  */
 public class ChangeMakingProblemLeetcode322 {
 

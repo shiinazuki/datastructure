@@ -13,10 +13,16 @@ import java.util.Queue;
 public class Solution102 {
 
     public static void main(String[] args) {
+        TreeNode root = new TreeNode(new TreeNode(9),
+                3,
+                new TreeNode(new TreeNode(15), 20, new TreeNode(7)));
+
+        System.out.println(levelOrder(root));
 
     }
 
     public static List<List<Integer>> levelOrder(TreeNode root) {
         return null;
+
     }
 }
