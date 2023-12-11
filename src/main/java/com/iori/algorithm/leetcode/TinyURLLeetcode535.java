@@ -37,7 +37,7 @@ public class TinyURLLeetcode535 {
 
                    a-z 0-9 A-Z  62进制的数字
 
-           0   1   2   3   4   5   6   7   8   9   a   b   c   d   e   f
+           0   1   2   3   4   5   6   7   8   9   a   b   c   d   e   f1
 
            十进制 => 十六进制
            31       1f

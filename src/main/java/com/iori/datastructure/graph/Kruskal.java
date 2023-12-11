@@ -34,6 +34,7 @@ public class Kruskal {
         public int compareTo(Edge o) {
             return Integer.compare(this.weight, o.weight);
         }
+
         @Override
         public String toString() {
             return vertices.get(start).name + "<->" + vertices.get(end).name + "(" + weight + ")";

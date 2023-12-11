@@ -29,24 +29,9 @@ public class TopologicalSortDFSLianXi {
 
         List<Vertex> graph = new ArrayList<>(List.of(v1, v2, v3, v4, v5, v6, v7));
 
-        LinkedList<String> stack = new LinkedList<>();
-        for (Vertex v : graph) {
-            dfs(v, stack);
-        }
-        System.out.println(stack);
 
     }
 
-    /**
-     * 深度优先遍历  递归
-     *
-     * @param v
-     * @param stack
-     */
-    private static void dfs(Vertex v, LinkedList<String> stack) {
-
-
-    }
 
 
 }

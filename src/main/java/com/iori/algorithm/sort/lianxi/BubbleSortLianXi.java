@@ -42,9 +42,7 @@ public class BubbleSortLianXi {
      * @param array
      */
     private static void bubbleSort(int[] array) {
-
     }
-
 
 
 }

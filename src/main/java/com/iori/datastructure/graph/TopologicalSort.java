@@ -26,7 +26,8 @@ public class TopologicalSort {
         v5.edges = List.of(new Edge(v7));
         v7.edges = List.of();
 
-        List<Vertex> graph = new ArrayList<>(List.of(v1, v2, v3, v4, v5, v6, v7));
+        List<Vertex> graph =
+                new ArrayList<>(List.of(v1, v2, v3, v4, v5, v6, v7));
         //1.统计每个顶点的入度
         for (Vertex v : graph) {
             for (Edge edge : v.edges) {
@@ -53,9 +54,19 @@ public class TopologicalSort {
                 }
             }
         }
+
+        if (result.size() != graph.size()) {
+            System.out.println("出现环");
+        } else {
+            for (String key : result) {
+                System.out.println(key);
+            }
+        }
+
         //如果放入结果的集合大小不等于原集合的大小 说明有环
         System.out.println(result.size());
         System.out.println(graph.size());
+
 
     }
 

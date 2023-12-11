@@ -23,22 +23,15 @@ public class BlockingQueueLianXi2<E> implements BlockingQueue<E> {
         array = (E[]) new Object[capacity];
     }
 
-
     private ReentrantLock headLock = new ReentrantLock();
-    private Condition headWaits = headLock.newCondition();
+    private Condition headWait = headLock.newCondition();
     private ReentrantLock tailLock = new ReentrantLock();
-    private Condition tailWaits = tailLock.newCondition();
+    private Condition tailWait = tailLock.newCondition();
 
-    public boolean isEmpty() {
-        return size.get() == 0;
-    }
-
-    public boolean isFull() {
-        return size.get() == array.length;
-    }
 
     @Override
     public void offer(E e) throws InterruptedException {
+
 
     }
 
@@ -51,6 +44,14 @@ public class BlockingQueueLianXi2<E> implements BlockingQueue<E> {
     public E poll() throws InterruptedException {
 
         return null;
+    }
+
+    public boolean isEmpty() {
+        return size.get() == 0;
+    }
+
+    public boolean isFull() {
+        return size.get() == array.length;
     }
 
 

@@ -36,9 +36,7 @@ public class DijkstraLianXi {
 
     private static void dijkstra(List<Vertex> graph, Vertex source) {
 
-
     }
-
 
 
 }

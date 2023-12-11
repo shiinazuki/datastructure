@@ -1,5 +1,6 @@
 package com.iori.datastructure.graph;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Stack;
 
@@ -23,8 +24,8 @@ public class DFSLianXi {
         v5.edges = List.of();
         v6.edges = List.of(new Edge(v5, 9));
 
-        dfs(v1);
-        //dfs2(v1);
+        //dfs(v1);
+        dfs2(v1);
 
     }
 
@@ -34,7 +35,6 @@ public class DFSLianXi {
      * @param v
      */
     private static void dfs2(Vertex v) {
-
 
     }
 

@@ -17,7 +17,7 @@ public class LongestSubstringLeetcode395 {
         //System.out.println(longestSubstring("aaabb", 3)); // ababb
         /*
             ddd aabaaabaa iiii fbff
-                aa aaa aa      f ff
+                aa aaa aa      f1 ff
 
             统计字符串中每个字符的出现次数，移除哪些出现次数 < k 的字符
             剩余的子串，递归做此处理，直至

@@ -8,7 +8,7 @@ public class Review10 {
     public static void main(String[] args) {
         int n = 6;
         int[] nums = new int[n + 1];
-        //System.out.println(f(n, nums));
+        //System.out.println(f1(n, nums));
 
         print(5);
     }

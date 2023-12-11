@@ -24,6 +24,9 @@ public class InsertionSortLianXi {
 
     }
 
+
+
+
     /**
      * 插入排序 二分优化
      * @param array

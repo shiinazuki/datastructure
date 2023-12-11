@@ -22,20 +22,20 @@ public class BellmanFordLianXi {
     }
 
     /*
-            f(v) 用来表示从起点出发，到达 v 这个顶点的最短距离
+            f1(v) 用来表示从起点出发，到达 v 这个顶点的最短距离
             初始时
-            f(v) = 0   当 v==起点 时
-            f(v) = ∞   当 v!=起点 时
+            f1(v) = 0   当 v==起点 时
+            f1(v) = ∞   当 v!=起点 时
 
             之后
             新           旧     所有from
-            f(to) = min(f(to), f(from) + from.weight)
+            f1(to) = min(f1(to), f1(from) + from.weight)
 
             from 从哪来
             to   到哪去
 
-            f(v4) = min( ∞, f(v3) + 11 ) = 20
-            f(v4) = min( 20, f(v2) + 15 ) = 20
+            f1(v4) = min( ∞, f1(v3) + 11 ) = 20
+            f1(v4) = min( 20, f1(v2) + 15 ) = 20
 
 
             v1  v2  v3  v4  v5  v6

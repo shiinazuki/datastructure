@@ -35,7 +35,6 @@ public class DijkstraPriorityQueueLianXi {
 
     private static void dijkstra(List<Vertex> graph, Vertex source) {
 
-
     }
 
     /**

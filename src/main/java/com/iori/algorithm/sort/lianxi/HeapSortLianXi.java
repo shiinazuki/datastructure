@@ -55,6 +55,7 @@ public class HeapSortLianXi {
      */
     private static void down1(int[] array, int parent, int size) {
 
+
     }
 
     /**
@@ -64,7 +65,6 @@ public class HeapSortLianXi {
      * @param value
      */
     private static void up(int[] array, int value) {
-
     }
 
     /**
