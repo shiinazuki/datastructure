@@ -8,11 +8,14 @@ import java.util.Arrays;
 public class BubbleSort {
 
     public static void main(String[] args) {
-        int[] array = {6, 5, 4, 3, 2, 1};
+        int[] array = { 6, 5, 4, 3, 2, 1 };
+        int[] array = { 6, 5, 4, 3, 2, 1 };
+        int[] array = { 6, 5, 4, 3, 2, 1 };
+        int[] array = { 6, 5, 4, 3, 2, 1 };
         System.out.println(Arrays.toString(array));
-        //bubbleSort(array);
+        // bubbleSort(array);
         bubbleSort1(array);
-        //bubbleSort2(array);
+        // bubbleSort2(array);
         System.out.println(Arrays.toString(array));
 
     }
@@ -38,7 +41,6 @@ public class BubbleSort {
         } while (j != 0);
     }
 
-
     /**
      * 非递归实现
      *
@@ -55,7 +57,6 @@ public class BubbleSort {
             }
         }
     }
-
 
     /**
      * 递归实现
@@ -87,6 +88,5 @@ public class BubbleSort {
         }
         bubble(array, x);
     }
-
 
 }
